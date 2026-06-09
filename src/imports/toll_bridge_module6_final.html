@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 6 — AI Tools for ESL Teaching | Toll Bridge Education</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --pd: #210635; --pr: #420D4B; --pw: #6667AB;
+    --bl: #F5D5E0; --lm: #AADD44; --wh: #FAFAF8;
+  }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--pd);
+    color: var(--wh);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .bar {
+    background: rgba(0,0,0,0.35);
+    padding: 12px 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 13px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    flex-shrink: 0;
+  }
+  .brand { font-weight: 500; color: var(--lm); letter-spacing: 0.08em; font-size: 12px; text-transform: uppercase; }
+  .tag { background: rgba(255,255,255,0.1); color: var(--bl); padding: 4px 14px; border-radius: 20px; font-size: 12px; }
+  .prog-wrap { padding: 12px 40px 0; flex-shrink: 0; }
+  .prog-lbl { display: flex; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,0.35); margin-bottom: 8px; }
+  .prog-track { height: 3px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; }
+  .prog-fill { height: 100%; background: var(--lm); border-radius: 2px; transition: width 0.5s ease; }
+
+  .stage { flex: 1; position: relative; overflow: hidden; }
+  .slide {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px 40px;
+    opacity: 0; transform: translateX(80px);
+    transition: opacity 0.45s ease, transform 0.45s ease;
+    pointer-events: none;
+  }
+  .slide.active { opacity: 1; transform: translateX(0); pointer-events: all; }
+  .slide.exit { opacity: 0; transform: translateX(-80px); }
+  .inner { max-width: 700px; width: 100%; }
+
+  .slide-label { font-size: 11px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--pw); margin-bottom: 12px; }
+  .hero-quote { font-family: 'Playfair Display', serif; font-size: clamp(24px, 4vw, 40px); font-weight: 700; color: var(--wh); line-height: 1.2; margin-bottom: 12px; }
+  .hero-quote em { color: var(--bl); font-style: italic; }
+  .sub-quote { font-size: 14px; color: rgba(255,255,255,0.5); font-weight: 300; line-height: 1.7; font-style: italic; border-left: 2px solid var(--lm); padding-left: 14px; margin-top: 16px; }
+  .body-text { font-size: 15px; line-height: 1.8; color: rgba(255,255,255,0.72); font-weight: 300; margin-bottom: 0.8rem; }
+  .body-text strong { color: var(--wh); font-weight: 500; }
+  .statement { font-family: 'Playfair Display', serif; font-size: clamp(16px, 2.5vw, 22px); color: var(--wh); line-height: 1.4; margin: 12px 0; }
+  .statement em { color: var(--lm); font-style: italic; }
+
+  /* TOOL GRID */
+  .tool-grid { display: grid; gap: 10px; margin: 14px 0; }
+  .g2 { grid-template-columns: 1fr 1fr; }
+  .g3 { grid-template-columns: 1fr 1fr 1fr; }
+  .g4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+  .tool-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 14px;
+    padding: 14px;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .tool-card:hover { border-color: rgba(170,221,68,0.4); background: rgba(255,255,255,0.08); }
+
+  .tool-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+
+  .tool-logo {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.08);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .tool-logo img {
+    width: 100%; height: 100%;
+    object-fit: contain;
+    border-radius: 6px;
+  }
+
+  .tool-name { font-size: 13px; font-weight: 500; color: var(--wh); flex: 1; }
+
+  .badge-link {
+    display: inline-block;
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 3px 10px; border-radius: 20px;
+    margin-bottom: 8px;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .badge-link:hover { opacity: 0.75; }
+  .badge-free { background: rgba(170,221,68,0.15); border: 1px solid rgba(170,221,68,0.35); color: var(--lm); }
+  .badge-paid { background: rgba(102,103,171,0.15); border: 1px solid rgba(102,103,171,0.35); color: var(--pw); }
+
+  .tool-desc { font-size: 11px; color: rgba(255,255,255,0.5); line-height: 1.55; font-weight: 300; }
+
+  /* EXAMPLE BOX */
+  .example-box { background: rgba(170,221,68,0.08); border: 1px solid rgba(170,221,68,0.2); border-radius: 12px; padding: 14px 18px; margin: 12px 0; }
+  .example-label { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lm); margin-bottom: 7px; }
+  .example-box p { font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.7; font-weight: 300; margin: 0; }
+  .example-box p strong { color: var(--wh); font-weight: 500; }
+
+  /* STEP LIST */
+  .step-list { display: flex; flex-direction: column; gap: 9px; margin: 12px 0; }
+  .step { display: flex; align-items: flex-start; gap: 11px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 11px; padding: 11px 13px; }
+  .step-num { min-width: 24px; height: 24px; border-radius: 50%; background: var(--lm); color: var(--pd); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; flex-shrink: 0; }
+  .step-text { font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.6; font-weight: 300; }
+  .step-text strong { color: var(--wh); font-weight: 500; }
+
+  /* CHIPS */
+  .chips { display: flex; flex-wrap: wrap; gap: 7px; margin: 10px 0; }
+  .chip { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 30px; padding: 5px 13px; font-size: 12px; color: rgba(255,255,255,0.78); font-weight: 300; }
+  .chip.lime { background: rgba(170,221,68,0.12); border-color: rgba(170,221,68,0.3); color: var(--lm); }
+
+  /* CALLOUT */
+  .callout { background: rgba(102,103,171,0.12); border: 1px solid rgba(102,103,171,0.3); border-radius: 12px; padding: 14px 18px; margin: 12px 0; }
+  .callout p { font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.7; font-weight: 300; margin: 0; }
+  .callout p strong { color: var(--wh); font-weight: 500; }
+
+  .closing-pill { display: inline-block; background: var(--lm); color: var(--pd); font-size: 13px; font-weight: 500; padding: 9px 22px; border-radius: 30px; margin-top: 14px; }
+
+  /* DOTS & NAV */
+  .dots-bar { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px; flex-shrink: 0; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.2); cursor: pointer; transition: all 0.3s; }
+  .dot.active { background: var(--lm); width: 24px; border-radius: 4px; }
+  .nav-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 40px 18px; flex-shrink: 0; }
+  .nav-btn { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); color: var(--wh); padding: 10px 24px; border-radius: 30px; font-size: 14px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; }
+  .nav-btn:hover { background: rgba(255,255,255,0.14); }
+  .nav-btn:disabled { opacity: 0.2; cursor: not-allowed; }
+  .nav-btn.primary { background: var(--lm); color: var(--pd); border-color: var(--lm); font-weight: 500; }
+  .nav-btn.primary:hover { background: #c0f050; }
+  .counter { font-size: 13px; color: rgba(255,255,255,0.35); }
+  .mascot { position: fixed; bottom: 68px; right: 18px; font-size: 26px; cursor: pointer; transition: transform 0.3s; z-index: 100; }
+  .mascot:hover { transform: scale(1.2) rotate(-10deg); }
+
+  @media (max-width: 640px) {
+    .slide { padding: 16px; }
+    .nav-row { padding: 6px 16px 14px; }
+    .bar, .prog-wrap { padding-left: 16px; padding-right: 16px; }
+    .g3, .g4 { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <span class="brand">Toll Bridge Education</span>
+  <span class="tag">Module 6 · AI Tools for ESL Teaching</span>
+</div>
+<div class="prog-wrap">
+  <div class="prog-lbl"><span id="pt">Slide 1 of 11</span><span>Module 6</span></div>
+  <div class="prog-track"><div class="prog-fill" id="pf" style="width:9%"></div></div>
+</div>
+
+<div class="stage">
+
+  <!-- SLIDE 1: TITLE -->
+  <div class="slide active" id="s0">
+    <div class="inner">
+      <div class="slide-label">Module 6</div>
+      <div class="hero-quote">AI Tools for<br><em>ESL Teaching.</em></div>
+      <div class="body-text">You do not need to be a tech expert to use AI. You just need to know which tools do what — and how to drop them into your classes without wasting time.</div>
+      <div class="body-text">This module covers the tools real ESL teachers are using right now. Organised by what you actually need them for. Every badge is clickable — tap it to go straight to the website.</div>
+      <div class="sub-quote">"AI does not replace the teacher. It removes the busywork so the teacher can focus on what only a human can do."</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: MUSIC & SONG -->
+  <div class="slide" id="s1">
+    <div class="inner">
+      <div class="slide-label">Category 1 — Music & Songs</div>
+      <div class="statement">Children remember words<br>they <em>sing.</em></div>
+      <div class="body-text">You do not need to know how to sing or compose. AI generates custom songs for any vocabulary topic in seconds.</div>
+      <div class="tool-grid g2">
+        <div class="tool-card">
+          <div class="tool-header">
+            <div class="tool-logo"><img src="logo_suno.jpeg" alt="Suno"></div>
+            <div class="tool-name">Suno AI</div>
+          </div>
+          <a href="https://suno.com" target="_blank" class="badge-link badge-free">Free tier → Visit</a>
+          <div class="tool-desc">Type a topic or lyrics — Suno generates a full song with vocals and music. Perfect for vocabulary songs, greeting rituals, or phonics.</div>
+        </div>
+        <div class="tool-card">
+          <div class="tool-header">
+            <div class="tool-logo"><img src="logo_udio.png" alt="Udio"></div>
+            <div class="tool-name">Udio</div>
+          </div>
+          <a href="https://udio.com" target="_blank" class="badge-link badge-free">Free tier → Visit</a>
+          <div class="tool-desc">Generates full songs from text prompts. Great alternative to Suno or for getting a different musical style.</div>
+        </div>
+      </div>
+      <div class="example-box">
+        <div class="example-label">Real classroom example</div>
+        <p>Ask ChatGPT to write simple lyrics about colours or animals, paste into Suno to generate the song. Play it in class. <strong>By the third session, students know every word without drilling.</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: IMAGE GENERATION -->
+  <div class="slide" id="s2">
+    <div class="inner">
+      <div class="slide-label">Category 2 — Image Generation</div>
+      <div class="statement">Can't find the right image?<br><em>Generate it in seconds.</em></div>
+      <div class="body-text">Mid-class and need to show a student exactly what a word means? AI image generators solve this instantly.</div>
+      <div class="tool-grid g3">
+        <div class="tool-card">
+          <div class="tool-header">
+            <div class="tool-logo"><img src="logo_chatgpt.png" alt="ChatGPT"></div>
+            <div class="tool-name">ChatGPT</div>
+          </div>
+          <a href="https://chatgpt.com" target="_blank" class="badge-link badge-free">Free tier → Visit</a>
+          <div class="tool-desc">Type what you need and get a custom image instantly. No searching. No copyright worries.</div>
+        </div>
+        <div class="tool-card">
+          <div class="tool-header">
+            <div class="tool-logo"><img src="logo_canva.jpeg" alt="Canva"></div>
+            <div class="tool-name">Canva AI</div>
+          </div>
+          <a href="https://canva.com" target="_blank" class="badge-link badge-free">Free tier → Visit</a>
+          <div class="tool-desc">Generate images AND design flashcards, slides, and worksheets in the same tool.</div>
+        </div>
+        <div class="tool-card">
+          <div class="tool-header">
+            <div class="tool-logo"><img src="logo_firefly.jpeg" alt="Adobe Firefly"></div>
+            <div class="tool-name">Adobe Firefly</div>
+          </div>
+          <a href="https://firefly.adobe.com" target="_blank" class="badge-link badge-free">Free tier → Visit</a>
+          <div class="tool-desc">High quality image generation. Great for visual aids, scene illustrations, and story images.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: LESSON PLANNING -->
+  <div class="slide" id="s3">
+    <div class="inner">
+      <div class="slide-label">Category 3 — Lesson Planning</div>
+      <div class="statement">Build a full lesson plan<br><em>in minutes, not hours.</em></div>
+      <div class="body-text">These tools take your topic, your student's level, and their age — and generate a complete lesson plan ready to teach.</div>
+      <div class="tool-grid g3">
+        <div class="tool-card">
+          <div class="tool-header">
+            <div class="tool-logo"><img src="logo_magicschool.jpeg" alt="MagicSchool"></div>
+            <div class="tool-name">MagicSchool AI</div>
+          </div>
+          <a href="https://magicschool.ai" target="_blank" class="badge-link badge-free">Free tier → Visit</a>
+          <div class="tool-desc">Built specifically for teachers. Lesson plans, quizzes, feedback, and parent emails in one place.</div>
+        </div>
+        <div class="tool-card">
+          <div class="tool-header">
+            <div class="tool-logo"><img src="logo_chatgpt.png" alt="ChatGPT"></div>
+            <div class="tool-name">ChatGPT</div>
+          </div>
+          <a href="https://chatgpt.com" target="_blank" class="badge-link badge-free">Free tier → Visit</a>
+          <div class="tool-desc">Ask it to plan a 20-minute ESL lesson for a 9-year-old beginner. Full structured plan delivered instantly.</div>
+        </div>
+        <div class="tool-card">
+          <div class="tool-header">
+            <div class="tool-logo"><img src="logo_twee.png" alt="Twee"></div>
+            <div class="tool-name">Twee</div>
+          </div>
+          <a href="https://twee.com" target="_blank" class="badge-link badge-free">Free tier → Visit</a>
+          <div class="tool-desc">Built for ESL teachers. Paste a topic and Twee generates comprehension questions, dialogues, and exercises.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: GAMES & QUIZZES -->
+  <div class="slide" id="s4">
+    <div class="inner">
+      <div class="slide-label">Category 4 — Games & Quizzes</div>
+      <div class="statement">Turn any lesson into<br>a <em>game.</em></div>
+      <div class="body-text">Students who are playing are students who are learning. Build interactive games and quizzes in minutes.</div>
+      <div class="tool-grid g4">
+        <div class="tool-card">
+          <div class="tool-header">
+            <div class="tool-logo"><img src="logo_kahoot.png" alt="Kahoot"></div>
+            <div class="tool-name">Kahoot!</div>
+          </div>
+          <a href="https://kahoot.com" target="_blank" class="badge-link badge-free">Free tier → Visit</a>
+          <div class="tool-desc">Live quiz games. Students race to answer. Energy spikes immediately.</div>
+        </div>
+        <div class="tool-card">
+          <div class="tool-header">
+            <div class="tool-logo"><img src="logo_quizizz.jpeg" alt="Quizizz"></div>
+            <div class="tool-name">Quizizz</div>
+          </div>
+          <a href="https://quizizz.com" target="_blank" class="badge-link badge-free">Free tier → Visit</a>
+          <div class="tool-desc">Self-paced quizzes. Great for homework review between sessions.</div>
+        </div>
+        <div class="tool-card">
+          <div class="tool-header">
+            <div class="tool-logo"><img src="logo_wordwall.png" alt="Wordwall"></div>
+            <div class="tool-name">Wordwall</div>
+          </div>
+          <a href="https://wordwall.net" target="_blank" class="badge-link badge-free">Free tier → Visit</a>
+          <div class="tool-desc">Matching games, anagrams, word searches. Students play on screen during class.</div>
+        </div>
+        <div class="tool-card">
+          <div class="tool-header">
+            <div class="tool-logo" style="background:#fff;"><img src="logo_canva.jpeg" alt="Gamma"></div>
+            <div class="tool-name">Gamma</div>
+          </div>
+          <a href="https://gamma.app" target="_blank" class="badge-link badge-free">Free tier → Visit</a>
+          <div class="tool-desc">AI-generated lesson decks. Type a topic — Gamma builds the slides automatically.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: FLASHCARDS -->
+  <div class="slide" id="s5">
+    <div class="inner">
+      <div class="slide-label">Category 5 — Flashcards & Vocabulary</div>
+      <div class="statement">Vocabulary sticks when<br>students <em>interact with it.</em></div>
+      <div class="body-text">These tools auto-generate flashcard sets, matching games, and practice activities from any word list.</div>
+      <div class="tool-grid g3">
+        <div class="tool-card">
+          <div class="tool-header">
+            <div class="tool-logo"><img src="logo_quizlet.png" alt="Quizlet"></div>
+            <div class="tool-name">Quizlet AI</div>
+          </div>
+          <a href="https://quizlet.com" target="_blank" class="badge-link badge-free">Free tier → Visit</a>
+          <div class="tool-desc">Type your word list — Quizlet generates flashcards, matching games, and practice tests automatically.</div>
+        </div>
+        <div class="tool-card">
+          <div class="tool-header">
+            <div class="tool-logo"><img src="logo_anki.jpeg" alt="Anki"></div>
+            <div class="tool-name">Anki</div>
+          </div>
+          <a href="https://apps.ankiweb.net" target="_blank" class="badge-link badge-free">Free → Visit</a>
+          <div class="tool-desc">Spaced repetition flashcards. Words appear just before students forget them. One of the most proven vocab tools in the world.</div>
+        </div>
+        <div class="tool-card">
+          <div class="tool-header">
+            <div class="tool-logo"><img src="logo_diffit.png" alt="Diffit"></div>
+            <div class="tool-name">Diffit</div>
+          </div>
+          <a href="https://web.diffit.me" target="_blank" class="badge-link badge-free">Free tier → Visit</a>
+          <div class="tool-desc">Paste any text or link — Diffit generates a reading passage, vocabulary list, and questions at your student's exact level.</div>
+        </div>
+      </div>
+      <div class="example-box">
+        <div class="example-label">How to use this in class</div>
+        <p>Before each session, send your student a Quizlet link with the week's vocabulary. They practice 5 minutes before class. <strong>By the time you meet, they already know the words.</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: STUDENT DIAGNOSIS -->
+  <div class="slide" id="s6">
+    <div class="inner">
+      <div class="slide-label">Category 6 — Diagnosing Student Needs</div>
+      <div class="statement">Know exactly what your<br>student needs — <em>before they tell you.</em></div>
+      <div class="body-text">These tools help you understand where your student is struggling so you can target your lessons precisely.</div>
+      <div class="tool-grid g3">
+        <div class="tool-card">
+          <div class="tool-header">
+            <div class="tool-logo"><img src="logo_speechace.png" alt="Speechace"></div>
+            <div class="tool-name">Speechace</div>
+          </div>
+          <a href="https://speechace.com" target="_blank" class="badge-link badge-free">Free tier → Visit</a>
+          <div class="tool-desc">Analyses your student's spoken English and gives a pronunciation score for every word. Shows exactly which sounds they struggle with.</div>
+        </div>
+        <div class="tool-card">
+          <div class="tool-header">
+            <div class="tool-logo"><img src="logo_curipod.png" alt="Curipod"></div>
+            <div class="tool-name">Curipod</div>
+          </div>
+          <a href="https://curipod.com" target="_blank" class="badge-link badge-free">Free tier → Visit</a>
+          <div class="tool-desc">AI interactive lessons with built-in student response tracking. See which questions students got wrong and why.</div>
+        </div>
+        <div class="tool-card">
+          <div class="tool-header">
+            <div class="tool-logo"><img src="logo_chatgpt.png" alt="ChatGPT"></div>
+            <div class="tool-name">ChatGPT</div>
+          </div>
+          <a href="https://chatgpt.com" target="_blank" class="badge-link badge-free">Free tier → Visit</a>
+          <div class="tool-desc">Describe your student — age, level, struggles, goals — and ask ChatGPT what to focus on. It gives you a diagnosis and a plan.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 8: SUNO DEEP DIVE -->
+  <div class="slide" id="s7">
+    <div class="inner">
+      <div class="slide-label">Tool deep dive — Suno AI</div>
+      <div class="statement">Turn your student's voice<br>into an <em>English lesson.</em></div>
+      <div class="body-text">A powerful technique for students who love to sing — even if they don't know the English words yet.</div>
+      <div class="step-list">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">Ask your student to <strong>sing something they love</strong> in their language and send you a voice note.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">Use <strong>ChatGPT to translate</strong> the meaning into English — keeping the emotion and rhythm.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">Paste the English lyrics into <strong>Suno AI</strong> to generate a full song in English with music.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-text">Play it in the next class. <strong>They hear their own song — in English.</strong> Engagement goes through the roof.</div>
+        </div>
+      </div>
+      <div class="callout">
+        <p>Students connect emotionally to something they already love. <strong>Emotional connection accelerates language learning faster than any drill.</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 9: FREE VS PAID -->
+  <div class="slide" id="s8">
+    <div class="inner">
+      <div class="slide-label">Free vs Paid — What you need to know</div>
+      <div class="statement">You do not need to<br><em>pay for everything.</em></div>
+      <div class="body-text">Most tools in this module have generous free tiers more than enough when you are starting out.</div>
+      <div class="example-box">
+        <div class="example-label">The rule</div>
+        <p>Use the free version first. If a tool saves you <strong>two or more hours per week</strong> consistently, it is worth paying for. Time is the one thing you cannot get back.</p>
+      </div>
+      <div class="body-text" style="margin-top:12px;">Tools you can use entirely for free:</div>
+      <div class="chips">
+        <span class="chip lime">ChatGPT (basic)</span>
+        <span class="chip lime">Canva (basic)</span>
+        <span class="chip lime">Kahoot!</span>
+        <span class="chip lime">Wordwall (basic)</span>
+        <span class="chip lime">Quizlet (basic)</span>
+        <span class="chip lime">Anki</span>
+        <span class="chip lime">MagicSchool AI</span>
+        <span class="chip lime">Twee (basic)</span>
+        <span class="chip lime">Suno (basic)</span>
+        <span class="chip lime">Diffit (basic)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 10: HOW TO INTEGRATE -->
+  <div class="slide" id="s9">
+    <div class="inner">
+      <div class="slide-label">How to integrate AI into your classes</div>
+      <div class="statement">Start with <em>one tool.</em><br>Master it. Then add another.</div>
+      <div class="body-text">The biggest mistake teachers make with AI is trying all tools at once. Pick one per week and learn it properly.</div>
+      <div class="step-list">
+        <div class="step"><div class="step-num">1</div><div class="step-text"><strong>Week 1:</strong> Use ChatGPT to plan your next three lessons. Notice how much time you save.</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-text"><strong>Week 2:</strong> Add Wordwall or Kahoot! to one class. Watch what happens to your student's energy.</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-text"><strong>Week 3:</strong> Use Quizlet to build a vocabulary set for your student to practice between sessions.</div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-text"><strong>Week 4:</strong> Try Suno to generate a vocabulary song. Use it as your class warm-up ritual.</div></div>
+      </div>
+      <div class="callout">
+        <p>By Week 4, your lessons will feel completely different. <strong>That is the compounding effect of AI.</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 11: CLOSING -->
+  <div class="slide" id="s10">
+    <div class="inner">
+      <div class="slide-label">Remember this</div>
+      <div class="statement">Technology supports<br>the lesson. <em>You teach it.</em></div>
+      <div class="body-text">No AI tool can replace your warmth, your ability to read a student, or your instinct to pivot when something is not working. These tools handle the busywork so you can focus on the human connection.</div>
+      <div class="body-text"><strong>Use AI to prepare better. Not to be present less.</strong></div>
+      <div class="example-box" style="margin-top:16px;">
+        <div class="example-label">Your challenge this week</div>
+        <p>Pick one tool from this module you have never used before. Use it in your next class or lesson plan. Share your experience in the group — what worked, what surprised you, what you would do differently.</p>
+      </div>
+      <span class="closing-pill">Module 6 complete 🦎</span>
+    </div>
+  </div>
+
+</div>
+
+<div class="dots-bar" id="dots"></div>
+<div class="nav-row">
+  <button class="nav-btn" id="prevBtn" onclick="go(-1)" disabled>← Back</button>
+  <span class="counter" id="counter">1 / 11</span>
+  <button class="nav-btn primary" id="nextBtn" onclick="go(1)">Next →</button>
+</div>
+<div class="mascot" id="mascot">🦎</div>
+
+<script>
+  const total = 11;
+  let cur = 0, busy = false;
+  const db = document.getElementById('dots');
+  for (let i = 0; i < total; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.onclick = () => goTo(i);
+    db.appendChild(d);
+  }
+  function ui() {
+    document.querySelectorAll('.dot').forEach((d, i) => d.className = 'dot' + (i === cur ? ' active' : ''));
+    document.getElementById('prevBtn').disabled = cur === 0;
+    document.getElementById('nextBtn').textContent = cur === total - 1 ? '✓ Complete' : 'Next →';
+    document.getElementById('counter').textContent = (cur + 1) + ' / ' + total;
+    document.getElementById('pt').textContent = 'Slide ' + (cur + 1) + ' of ' + total;
+    document.getElementById('pf').style.width = ((cur + 1) / total * 100) + '%';
+  }
+  function goTo(idx) {
+    if (busy || idx === cur) return;
+    busy = true;
+    const prev = document.getElementById('s' + cur);
+    prev.classList.remove('active'); prev.classList.add('exit');
+    setTimeout(() => {
+      prev.classList.remove('exit');
+      cur = idx;
+      const next = document.getElementById('s' + cur);
+      next.style.transform = 'translateX(80px)';
+      next.classList.add('active');
+      setTimeout(() => { busy = false; }, 450);
+      ui();
+      const m = document.getElementById('mascot');
+      m.style.transform = 'scale(1.3) rotate(15deg)';
+      setTimeout(() => { m.style.transform = 'scale(1) rotate(0)'; }, 300);
+    }, 220);
+  }
+  function go(dir) { const n = cur + dir; if (n >= 0 && n < total) goTo(n); }
+  document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') go(1); if (e.key === 'ArrowLeft') go(-1); });
+  ui();
+</script>
+</body>
+</html>

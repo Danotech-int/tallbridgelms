@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 4 Quiz — Getting Hired | Tall Bridge Education</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --pd: #210635; --pr: #420D4B; --pw: #6667AB; --bl: #F5D5E0; --lm: #AADD44; --wh: #FAFAF8; --ok: #2ecc71; --no: #e74c3c; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--pd); color: var(--wh); min-height: 100vh; display: flex; flex-direction: column; }
+  .bar { background: rgba(0,0,0,0.3); padding: 12px 40px; display: flex; align-items: center; justify-content: space-between; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.08); flex-shrink: 0; }
+  .brand { font-weight: 500; color: var(--lm); letter-spacing: 0.08em; font-size: 12px; text-transform: uppercase; }
+  .tag { background: rgba(255,255,255,0.1); color: var(--bl); padding: 4px 14px; border-radius: 20px; font-size: 12px; }
+  .prog-wrap { padding: 14px 40px 0; flex-shrink: 0; }
+  .prog-lbl { display: flex; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,0.4); margin-bottom: 8px; }
+  .prog-track { height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; }
+  .prog-fill { height: 100%; background: var(--lm); border-radius: 2px; transition: width 0.5s ease; }
+  .stage { flex: 1; display: flex; align-items: center; justify-content: center; padding: 28px 40px; }
+  .quiz-card { max-width: 640px; width: 100%; animation: slideIn 0.4s ease; }
+  .quiz-card.hidden { display: none; }
+  @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .q-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+  .q-num { font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pw); }
+  .q-topic { font-size: 11px; background: rgba(102,103,171,0.2); border: 1px solid rgba(102,103,171,0.3); color: var(--pw); padding: 3px 10px; border-radius: 20px; }
+  .q-text { font-family: 'Playfair Display', serif; font-size: clamp(17px, 2.8vw, 24px); color: var(--wh); line-height: 1.35; margin-bottom: 24px; font-weight: 700; }
+  .options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+  .opt { background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 14px 18px; text-align: left; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 300; color: rgba(255,255,255,0.85); line-height: 1.5; transition: all 0.2s; display: flex; align-items: flex-start; gap: 12px; width: 100%; }
+  .opt:hover:not(:disabled) { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.25); }
+  .opt:disabled { cursor: default; }
+  .opt.correct { background: rgba(46,204,113,0.15); border-color: var(--ok); color: var(--wh); }
+  .opt.wrong { background: rgba(231,76,60,0.12); border-color: var(--no); color: rgba(255,255,255,0.45); }
+  .opt-letter { min-width: 26px; height: 26px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; flex-shrink: 0; margin-top: 1px; transition: all 0.2s; }
+  .opt.correct .opt-letter { background: var(--ok); color: #fff; }
+  .opt.wrong .opt-letter { background: var(--no); color: #fff; }
+  .explanation { background: rgba(170,221,68,0.1); border: 1px solid rgba(170,221,68,0.3); border-radius: 12px; padding: 16px 20px; display: none; animation: fadeIn 0.4s ease; }
+  .explanation.show { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+  .exp-label { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lm); margin-bottom: 6px; }
+  .explanation p { font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.7; font-weight: 300; margin: 0; }
+  .next-btn { background: var(--lm); color: var(--pd); border: none; padding: 12px 30px; border-radius: 30px; font-size: 14px; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; margin-top: 16px; transition: all 0.2s; display: none; }
+  .next-btn.show { display: inline-block; }
+  .next-btn:hover { background: #c0f050; }
+  .result-card { max-width: 560px; width: 100%; text-align: center; display: none; animation: slideIn 0.5s ease; }
+  .result-card.show { display: block; }
+  .result-icon { font-size: 60px; margin-bottom: 14px; display: block; }
+  .result-card h2 { font-family: 'Playfair Display', serif; font-size: 30px; color: var(--wh); margin-bottom: 8px; }
+  .result-card h2 em { color: var(--lm); font-style: italic; }
+  .result-card p { font-size: 15px; color: rgba(255,255,255,0.7); line-height: 1.7; margin-bottom: 10px; font-weight: 300; }
+  .score-pill { display: inline-block; background: var(--lm); color: var(--pd); font-size: 22px; font-weight: 500; padding: 11px 30px; border-radius: 40px; margin: 14px 0 20px; }
+  .breakdown { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 16px 0; text-align: left; }
+  .bd-item { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px 16px; }
+  .bd-topic { font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--pw); margin-bottom: 4px; }
+  .bd-val { font-size: 13px; color: var(--wh); font-weight: 300; }
+  .bd-val.pass { color: var(--ok); }
+  .bd-val.fail { color: var(--no); }
+  .restart-btn { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: var(--wh); padding: 11px 26px; border-radius: 30px; font-size: 14px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; margin-top: 8px; }
+  .restart-btn:hover { background: rgba(255,255,255,0.14); }
+  .mascot { position: fixed; bottom: 22px; right: 22px; font-size: 26px; cursor: pointer; transition: transform 0.3s; z-index: 100; }
+  .mascot:hover { transform: scale(1.2) rotate(-10deg); }
+  @media (max-width: 600px) { .stage { padding: 18px 16px; } .prog-wrap { padding: 10px 16px 0; } .bar { padding: 10px 16px; } .breakdown { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <span class="brand">Tall Bridge Education</span>
+  <span class="tag">Module 4 · Getting Hired Quiz</span>
+</div>
+<div class="prog-wrap">
+  <div class="prog-lbl"><span id="pt">Question 1 of 5</span><span id="st">Score: 0</span></div>
+  <div class="prog-track"><div class="prog-fill" id="pf" style="width:0%"></div></div>
+</div>
+
+<div class="stage">
+
+  <!-- Q1: TEFL -->
+  <div class="quiz-card" id="q0">
+    <div class="q-meta"><span class="q-num">Question 1 of 5</span><span class="q-topic">TEFL Certification</span></div>
+    <div class="q-text">The TeacherRecord TEFL certification course is 120 hours long. If you dedicate two hours per day to completing it, approximately how long will it take you to finish?</div>
+    <div class="options">
+      <button class="opt" onclick="ans(0,0)"><span class="opt-letter">A</span><span>Two weeks</span></button>
+      <button class="opt" onclick="ans(0,1)"><span class="opt-letter">B</span><span>Four weeks</span></button>
+      <button class="opt" onclick="ans(0,2)"><span class="opt-letter">C</span><span>Eight weeks</span></button>
+      <button class="opt" onclick="ans(0,3)"><span class="opt-letter">D</span><span>Six months</span></button>
+    </div>
+    <div class="explanation" id="e0"><div class="exp-label">Why this is correct</div><p>At two hours per day, 120 hours takes 60 days — approximately eight weeks. Your target within this cohort is to complete it in the first two weeks by increasing your daily study time. The course is fully online, free, and your certificate is issued the moment you finish.</p></div>
+    <button class="next-btn" id="n0" onclick="next(0)">Next question →</button>
+  </div>
+
+  <!-- Q2: TEFL -->
+  <div class="quiz-card hidden" id="q1">
+    <div class="q-meta"><span class="q-num">Question 2 of 5</span><span class="q-topic">TEFL Certification</span></div>
+    <div class="q-text">Which of the following is NOT a reason the TEFL certificate matters to foreign ESL employers?</div>
+    <div class="options">
+      <button class="opt" onclick="ans(1,0)"><span class="opt-letter">A</span><span>It proves you understand how to structure a lesson</span></button>
+      <button class="opt" onclick="ans(1,1)"><span class="opt-letter">B</span><span>It proves you are a native English speaker</span></button>
+      <button class="opt" onclick="ans(1,2)"><span class="opt-letter">C</span><span>It shows you can manage a classroom effectively</span></button>
+      <button class="opt" onclick="ans(1,3)"><span class="opt-letter">D</span><span>It signals that you are a professional, not just someone who can speak English</span></button>
+    </div>
+    <div class="explanation" id="e1"><div class="exp-label">Why this is correct</div><p>The TEFL certificate does not certify that you are a native speaker — it certifies that you are trained to teach. TeacherRecord's TEFL requires no degree and no native speaker status. What it proves is your commitment to professional teaching and your knowledge of how to structure and deliver effective lessons. This is recognised by employers worldwide.</p></div>
+    <button class="next-btn" id="n1" onclick="next(1)">Next question →</button>
+  </div>
+
+  <!-- Q3: CV -->
+  <div class="quiz-card hidden" id="q2">
+    <div class="q-meta"><span class="q-num">Question 3 of 5</span><span class="q-topic">Building Your CV</span></div>
+    <div class="q-text">Which of the following is the most important element missing from a weak ESL teacher CV that lists only job titles and dates?</div>
+    <div class="options">
+      <button class="opt" onclick="ans(2,0)"><span class="opt-letter">A</span><span>A list of hobbies and personal interests</span></button>
+      <button class="opt" onclick="ans(2,1)"><span class="opt-letter">B</span><span>A professional profile summary, specific numbers, age ranges taught, and a demo video link</span></button>
+      <button class="opt" onclick="ans(2,2)"><span class="opt-letter">C</span><span>A longer work history section with more previous employers listed</span></button>
+      <button class="opt" onclick="ans(2,3)"><span class="opt-letter">D</span><span>A formal cover letter attached separately</span></button>
+    </div>
+    <div class="explanation" id="e2"><div class="exp-label">Why this is correct</div><p>A strong ESL CV tells the employer immediately who you are, what you have achieved in numbers, which age groups you have taught, and gives them access to your intro video. Without these, you blend into every other application. Numbers, specificity, and a video link are what make a CV stand out to employers worldwide.</p></div>
+    <button class="next-btn" id="n2" onclick="next(2)">Next question →</button>
+  </div>
+
+  <!-- Q4: INTRO VIDEO -->
+  <div class="quiz-card hidden" id="q3">
+    <div class="q-meta"><span class="q-num">Question 4 of 5</span><span class="q-topic">Your Introductory Video</span></div>
+    <div class="q-text">What is the maximum recommended length for a teacher introductory video sent to Chinese ESL employers?</div>
+    <div class="options">
+      <button class="opt" onclick="ans(3,0)"><span class="opt-letter">A</span><span>Five minutes — to give the employer a thorough impression</span></button>
+      <button class="opt" onclick="ans(3,1)"><span class="opt-letter">B</span><span>Ten minutes — so you can cover your full teaching methodology</span></button>
+      <button class="opt" onclick="ans(3,2)"><span class="opt-letter">C</span><span>Two to three minutes maximum</span></button>
+      <button class="opt" onclick="ans(3,3)"><span class="opt-letter">D</span><span>Thirty seconds — keep it as brief as possible</span></button>
+    </div>
+    <div class="explanation" id="e3"><div class="exp-label">Why this is correct</div><p>Employers review dozens of videos. If yours is longer than three minutes, they will not finish it. Your goal is to communicate your energy, your teaching style, your commitment, and your personality in two minutes — maximum three. Every second must earn its place.</p></div>
+    <button class="next-btn" id="n3" onclick="next(3)">Next question →</button>
+  </div>
+
+  <!-- Q5: INTRO VIDEO -->
+  <div class="quiz-card hidden" id="q4">
+    <div class="q-meta"><span class="q-num">Question 5 of 5</span><span class="q-topic">Your Introductory Video</span></div>
+    <div class="q-text">A teacher records their intro video and says: "I am very strict and I expect my students to work hard and follow instructions at all times." Why is this a poor choice of messaging?</div>
+    <div class="options">
+      <button class="opt" onclick="ans(4,0)"><span class="opt-letter">A</span><span>Chinese parents do not value discipline in a teacher</span></button>
+      <button class="opt" onclick="ans(4,1)"><span class="opt-letter">B</span><span>It is too honest — teachers should not reveal their teaching style</span></button>
+      <button class="opt" onclick="ans(4,2)"><span class="opt-letter">C</span><span>It prioritises the teacher's rules over the child's experience — leading with warmth and capability is more effective</span></button>
+      <button class="opt" onclick="ans(4,3)"><span class="opt-letter">D</span><span>The word "strict" is grammatically incorrect in this context</span></button>
+    </div>
+    <div class="explanation" id="e4"><div class="exp-label">Why this is correct</div><p>Foreign employers want a teacher who delivers results AND one their child enjoys learning with. Leading with strictness signals rigidity, not warmth. A strong intro video leads with enthusiasm, passion for the subject, and commitment to the learner's success — then lets the teaching demonstrate the structure. Warmth first. Capability second. Always.</p></div>
+    <button class="next-btn" id="n4" onclick="showResult()">See my results →</button>
+  </div>
+
+  <!-- RESULT -->
+  <div class="result-card" id="result">
+    <span class="result-icon" id="ri">🏆</span>
+    <h2 id="rh">Loading...</h2>
+    <div class="score-pill" id="rs">0 / 5</div>
+    <p id="rm"></p>
+    <div class="breakdown">
+      <div class="bd-item"><div class="bd-topic">TEFL Certification</div><div class="bd-val" id="bd0">—</div></div>
+      <div class="bd-item"><div class="bd-topic">Building Your CV</div><div class="bd-val" id="bd1">—</div></div>
+      <div class="bd-item"><div class="bd-topic">Introductory Video</div><div class="bd-val" id="bd2">—</div></div>
+    </div>
+    <button class="restart-btn" onclick="restart()">Try again</button>
+  </div>
+
+</div>
+
+<div class="mascot" id="mascot">🦎</div>
+
+<script>
+  const correct = [2, 1, 1, 2, 2];
+  const topics = [0, 0, 1, 2, 2];
+  let score = 0;
+  let answered = new Array(5).fill(false);
+  let topicScore = [0, 0, 0];
+  let topicTotal = [2, 1, 2];
+
+  function ans(qi, chosen) {
+    if (answered[qi]) return;
+    answered[qi] = true;
+    const card = document.getElementById('q' + qi);
+    const btns = card.querySelectorAll('.opt');
+    btns.forEach((b, i) => {
+      b.disabled = true;
+      if (i === correct[qi]) b.classList.add('correct');
+      else if (i === chosen && chosen !== correct[qi]) b.classList.add('wrong');
+    });
+    if (chosen === correct[qi]) { score++; topicScore[topics[qi]]++; jump('celebrate'); }
+    else { jump('shake'); }
+    document.getElementById('st').textContent = 'Score: ' + score;
+    document.getElementById('e' + qi).classList.add('show');
+    document.getElementById('n' + qi).classList.add('show');
+    document.getElementById('pf').style.width = ((qi + 1) / 5 * 100) + '%';
+    document.getElementById('pt').textContent = 'Question ' + (qi + 1) + ' of 5';
+  }
+
+  function next(qi) {
+    document.getElementById('q' + qi).classList.add('hidden');
+    const nxt = document.getElementById('q' + (qi + 1));
+    nxt.classList.remove('hidden');
+    nxt.style.animation = 'none';
+    setTimeout(() => { nxt.style.animation = 'slideIn 0.4s ease'; }, 10);
+  }
+
+  function showResult() {
+    document.getElementById('q4').classList.add('hidden');
+    document.getElementById('pf').style.width = '100%';
+    const pct = Math.round((score / 5) * 100);
+    let icon, title, msg;
+    if (pct === 100) { icon = '🏆'; title = 'Hire-ready <em>teacher.</em>'; msg = 'You know exactly what employers are looking for and how to position yourself to get hired. Your CV, your video, and your certification are all going to do the work they need to do.'; }
+    else if (pct >= 60) { icon = '🌟'; title = 'Nearly <em>there.</em>'; msg = 'Strong result. Review the questions you missed — the details matter when it comes to getting hired. A stronger CV or a better intro video could be the difference between getting the role and getting overlooked.'; }
+    else { icon = '📚'; title = 'Review and <em>retry.</em>'; msg = 'Go back through the module lessons — specifically the CV guide and introductory video section. Everything you need to get hired is in those lessons. Come back to this quiz when you are ready.'; }
+    document.getElementById('ri').textContent = icon;
+    document.getElementById('rh').innerHTML = title;
+    document.getElementById('rs').textContent = score + ' / 5 correct';
+    document.getElementById('rm').textContent = msg;
+    const labels = ['bd0','bd1','bd2'];
+    const totals = [2,1,2];
+    labels.forEach((id, i) => {
+      const el = document.getElementById(id);
+      el.textContent = topicScore[i] + ' / ' + totals[i] + ' correct';
+      el.className = 'bd-val ' + (topicScore[i] === totals[i] ? 'pass' : topicScore[i] > 0 ? '' : 'fail');
+    });
+    document.getElementById('result').classList.add('show');
+  }
+
+  function restart() {
+    score = 0; answered = new Array(5).fill(false); topicScore = [0,0,0];
+    document.getElementById('st').textContent = 'Score: 0';
+    document.getElementById('pf').style.width = '0%';
+    document.getElementById('pt').textContent = 'Question 1 of 5';
+    document.getElementById('result').classList.remove('show');
+    for (let i = 0; i < 5; i++) {
+      const c = document.getElementById('q' + i);
+      c.classList.add('hidden');
+      c.querySelectorAll('.opt').forEach(b => { b.disabled = false; b.className = 'opt'; });
+      document.getElementById('e' + i).classList.remove('show');
+      document.getElementById('n' + i).classList.remove('show');
+    }
+    document.getElementById('q0').classList.remove('hidden');
+  }
+
+  function jump(t) {
+    const m = document.getElementById('mascot');
+    if (t === 'celebrate') { m.style.transform = 'scale(1.4) rotate(20deg)'; setTimeout(() => { m.style.transform = 'scale(1) rotate(0)'; }, 400); }
+    else { m.textContent = '😱'; m.style.transform = 'scale(1.2)'; setTimeout(() => { m.style.transform = 'scale(1)'; setTimeout(() => { m.textContent = '🦎'; }, 600); }, 400); }
+  }
+</script>
+</body>
+</html>

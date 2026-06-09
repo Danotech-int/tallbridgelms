@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Managing Me Quiz | Tall Bridge Education</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --pd: #210635; --pr: #420D4B; --pw: #6667AB; --bl: #F5D5E0; --lm: #AADD44; --wh: #FAFAF8; --ok: #2ecc71; --no: #e74c3c; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--pd); color: var(--wh); min-height: 100vh; display: flex; flex-direction: column; }
+  .bar { background: rgba(0,0,0,0.3); padding: 12px 40px; display: flex; align-items: center; justify-content: space-between; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.08); flex-shrink: 0; }
+  .brand { font-weight: 500; color: var(--lm); letter-spacing: 0.08em; font-size: 12px; text-transform: uppercase; }
+  .tag { background: rgba(255,255,255,0.1); color: var(--bl); padding: 4px 14px; border-radius: 20px; font-size: 12px; }
+  .prog-wrap { padding: 14px 40px 0; flex-shrink: 0; }
+  .prog-lbl { display: flex; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,0.4); margin-bottom: 8px; }
+  .prog-track { height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; }
+  .prog-fill { height: 100%; background: var(--lm); border-radius: 2px; transition: width 0.5s ease; }
+  .stage { flex: 1; display: flex; align-items: center; justify-content: center; padding: 28px 40px; }
+  .quiz-card { max-width: 640px; width: 100%; animation: slideIn 0.4s ease; }
+  .quiz-card.hidden { display: none; }
+  @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .q-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+  .q-num { font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pw); }
+  .q-topic { font-size: 11px; background: rgba(102,103,171,0.2); border: 1px solid rgba(102,103,171,0.3); color: var(--pw); padding: 3px 10px; border-radius: 20px; }
+  .q-text { font-family: 'Playfair Display', serif; font-size: clamp(17px, 2.8vw, 24px); color: var(--wh); line-height: 1.35; margin-bottom: 24px; font-weight: 700; }
+  .options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+  .opt { background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 14px 18px; text-align: left; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 300; color: rgba(255,255,255,0.85); line-height: 1.5; transition: all 0.2s; display: flex; align-items: flex-start; gap: 12px; width: 100%; }
+  .opt:hover:not(:disabled) { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.25); }
+  .opt:disabled { cursor: default; }
+  .opt.correct { background: rgba(46,204,113,0.15); border-color: var(--ok); color: var(--wh); }
+  .opt.wrong { background: rgba(231,76,60,0.12); border-color: var(--no); color: rgba(255,255,255,0.45); }
+  .opt-letter { min-width: 26px; height: 26px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; flex-shrink: 0; margin-top: 1px; transition: all 0.2s; }
+  .opt.correct .opt-letter { background: var(--ok); color: #fff; }
+  .opt.wrong .opt-letter { background: var(--no); color: #fff; }
+  .explanation { background: rgba(170,221,68,0.1); border: 1px solid rgba(170,221,68,0.3); border-radius: 12px; padding: 16px 20px; display: none; animation: fadeIn 0.4s ease; }
+  .explanation.show { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+  .exp-label { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lm); margin-bottom: 6px; }
+  .explanation p { font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.7; font-weight: 300; margin: 0; }
+  .next-btn { background: var(--lm); color: var(--pd); border: none; padding: 12px 30px; border-radius: 30px; font-size: 14px; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; margin-top: 16px; transition: all 0.2s; display: none; }
+  .next-btn.show { display: inline-block; }
+  .next-btn:hover { background: #c0f050; }
+  .result-card { max-width: 560px; width: 100%; text-align: center; display: none; animation: slideIn 0.5s ease; }
+  .result-card.show { display: block; }
+  .result-icon { font-size: 60px; margin-bottom: 14px; display: block; }
+  .result-card h2 { font-family: 'Playfair Display', serif; font-size: 30px; color: var(--wh); margin-bottom: 8px; }
+  .result-card h2 em { color: var(--lm); font-style: italic; }
+  .result-card p { font-size: 15px; color: rgba(255,255,255,0.7); line-height: 1.7; margin-bottom: 10px; font-weight: 300; }
+  .score-pill { display: inline-block; background: var(--lm); color: var(--pd); font-size: 22px; font-weight: 500; padding: 11px 30px; border-radius: 40px; margin: 14px 0 20px; }
+  .breakdown { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; text-align: left; }
+  .bd-item { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px 16px; }
+  .bd-topic { font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--pw); margin-bottom: 4px; }
+  .bd-val { font-size: 13px; color: var(--wh); font-weight: 300; }
+  .bd-val.pass { color: var(--ok); }
+  .bd-val.fail { color: var(--no); }
+  .restart-btn { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: var(--wh); padding: 11px 26px; border-radius: 30px; font-size: 14px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; margin-top: 8px; }
+  .restart-btn:hover { background: rgba(255,255,255,0.14); }
+  .mascot { position: fixed; bottom: 22px; right: 22px; font-size: 26px; cursor: pointer; transition: transform 0.3s; z-index: 100; }
+  .mascot:hover { transform: scale(1.2) rotate(-10deg); }
+  @media (max-width: 600px) { .stage { padding: 18px 16px; } .prog-wrap { padding: 10px 16px 0; } .bar { padding: 10px 16px; } .breakdown { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <span class="brand">Tall Bridge Education</span>
+  <span class="tag">Managing Me · Module Quiz</span>
+</div>
+<div class="prog-wrap">
+  <div class="prog-lbl"><span id="pt">Question 1 of 5</span><span id="st">Score: 0</span></div>
+  <div class="prog-track"><div class="prog-fill" id="pf" style="width:0%"></div></div>
+</div>
+
+<div class="stage">
+
+  <!-- Q1: PHYSICAL HEALTH -->
+  <div class="quiz-card" id="q0">
+    <div class="q-meta"><span class="q-num">Question 1 of 5</span><span class="q-topic">Physical Health</span></div>
+    <div class="q-text">As a remote ESL teacher sitting at a desk for several hours a day, what is the single most impactful daily habit for your physical and mental wellbeing?</div>
+    <div class="options">
+      <button class="opt" onclick="ans(0,0)"><span class="opt-letter">A</span><span>Drinking at least three cups of coffee to maintain energy throughout teaching sessions</span></button>
+      <button class="opt" onclick="ans(0,1)"><span class="opt-letter">B</span><span>Taking a 30-minute walk outside in natural light every day</span></button>
+      <button class="opt" onclick="ans(0,2)"><span class="opt-letter">C</span><span>Watching TV between classes to give your brain a rest</span></button>
+      <button class="opt" onclick="ans(0,3)"><span class="opt-letter">D</span><span>Stretching once per week on your day off</span></button>
+    </div>
+    <div class="explanation" id="e0"><div class="exp-label">Why this is correct</div><p>A daily 30-minute walk outside in natural light lowers cortisol, boosts serotonin, improves circulation, clears mental fog, and gives your eyes a much-needed break from screens. It costs nothing, requires no equipment, and has the most consistent positive impact of any single daily habit for remote workers.</p></div>
+    <button class="next-btn" id="n0" onclick="next(0)">Next question →</button>
+  </div>
+
+  <!-- Q2: BODY & SETUP -->
+  <div class="quiz-card hidden" id="q1">
+    <div class="q-meta"><span class="q-num">Question 2 of 5</span><span class="q-topic">Physical Health</span></div>
+    <div class="q-text">You have been teaching for four hours straight and notice your neck and lower back are aching. What is the most effective immediate response?</div>
+    <div class="options">
+      <button class="opt" onclick="ans(1,0)"><span class="opt-letter">A</span><span>Take a painkiller and continue teaching</span></button>
+      <button class="opt" onclick="ans(1,1)"><span class="opt-letter">B</span><span>Stand up, do a short stretch routine, and reassess your posture and chair setup</span></button>
+      <button class="opt" onclick="ans(1,2)"><span class="opt-letter">C</span><span>Lie down for thirty minutes between sessions</span></button>
+      <button class="opt" onclick="ans(1,3)"><span class="opt-letter">D</span><span>Drink more water and hope the pain passes</span></button>
+    </div>
+    <div class="explanation" id="e1"><div class="exp-label">Why this is correct</div><p>Pain is a signal. Standing up and stretching addresses the root cause — prolonged static posture — immediately. Reassessing your chair height, screen position, and lumbar support prevents the problem from returning. Building a five-minute stretch routine between every session is the long-term solution.</p></div>
+    <button class="next-btn" id="n1" onclick="next(1)">Next question →</button>
+  </div>
+
+  <!-- Q3: MENTAL HEALTH / BURNOUT -->
+  <div class="quiz-card hidden" id="q2">
+    <div class="q-meta"><span class="q-num">Question 3 of 5</span><span class="q-topic">Mental Health</span></div>
+    <div class="q-text">A teacher notices they have been dreading their classes, losing patience faster than usual, and feeling emotionally flat after sessions they used to enjoy. What do these signs most likely indicate?</div>
+    <div class="options">
+      <button class="opt" onclick="ans(2,0)"><span class="opt-letter">A</span><span>They need more difficult students to stay challenged</span></button>
+      <button class="opt" onclick="ans(2,1)"><span class="opt-letter">B</span><span>They are in the early stages of burnout and need to make deliberate changes to their routine</span></button>
+      <button class="opt" onclick="ans(2,2)"><span class="opt-letter">C</span><span>They are simply not suited to teaching and should consider another career</span></button>
+      <button class="opt" onclick="ans(2,3)"><span class="opt-letter">D</span><span>They need to take on more classes to increase their income and motivation</span></button>
+    </div>
+    <div class="explanation" id="e2"><div class="exp-label">Why this is correct</div><p>Dreading previously enjoyable work, reduced patience, and emotional flatness are classic early burnout signals. Burnout does not arrive suddenly — it creeps in over time. Recognising it early and making changes — building rest rituals, setting hard stop times, protecting social connection — is how you recover before it becomes serious.</p></div>
+    <button class="next-btn" id="n2" onclick="next(2)">Next question →</button>
+  </div>
+
+  <!-- Q4: MOOD MANAGEMENT -->
+  <div class="quiz-card hidden" id="q3">
+    <div class="q-meta"><span class="q-num">Question 4 of 5</span><span class="q-topic">Mood & Energy</span></div>
+    <div class="q-text">You wake up feeling emotionally flat and low on energy. You have a class starting in 40 minutes with a young learner who needs your full presence. What is the most effective quick reset?</div>
+    <div class="options">
+      <button class="opt" onclick="ans(3,0)"><span class="opt-letter">A</span><span>Cancel the class and reschedule — you cannot teach well when you feel this way</span></button>
+      <button class="opt" onclick="ans(3,1)"><span class="opt-letter">B</span><span>Drink two cups of coffee quickly to boost your energy before starting</span></button>
+      <button class="opt" onclick="ans(3,2)"><span class="opt-letter">C</span><span>Play an energising song, do two minutes of box breathing, and remind yourself of a specific student win</span></button>
+      <button class="opt" onclick="ans(3,3)"><span class="opt-letter">D</span><span>Tell your student how you are feeling so they understand if the class is slower today</span></button>
+    </div>
+    <div class="explanation" id="e3"><div class="exp-label">Why this is correct</div><p>Music changes your physiological state faster than almost anything else. Box breathing (in for 4, hold for 4, out for 4) activates your parasympathetic nervous system and brings you back into your body. Recalling a specific win reconnects you to your purpose. Together these three take under five minutes and are genuinely effective — not just motivational talk.</p></div>
+    <button class="next-btn" id="n3" onclick="next(3)">Next question →</button>
+  </div>
+
+  <!-- Q5: SOCIAL LIFE -->
+  <div class="quiz-card hidden" id="q4">
+    <div class="q-meta"><span class="q-num">Question 5 of 5</span><span class="q-topic">Social Life</span></div>
+    <div class="q-text">A remote ESL teacher realises they have not socialised meaningfully in two weeks. Their schedule is built around early morning and late evening sessions. What is the most practical solution?</div>
+    <div class="options">
+      <button class="opt" onclick="ans(4,0)"><span class="opt-letter">A</span><span>Accept that remote teaching means giving up a social life during busy periods</span></button>
+      <button class="opt" onclick="ans(4,1)"><span class="opt-letter">B</span><span>Reduce the number of students they take on so they have more free time</span></button>
+      <button class="opt" onclick="ans(4,2)"><span class="opt-letter">C</span><span>Block specific social time in their calendar and treat it like a booked class — non-negotiable</span></button>
+      <button class="opt" onclick="ans(4,3)"><span class="opt-letter">D</span><span>Join an online gaming community so they can socialise without leaving home</span></button>
+    </div>
+    <div class="explanation" id="e4"><div class="exp-label">Why this is correct</div><p>Without deliberate protection, social life disappears into an irregular schedule. Blocking social time in your calendar and treating it with the same respect as a student booking is the only reliable solution. Human connection is not a luxury for a teacher — it is what keeps you emotionally available to give to your students. You cannot pour from an empty cup.</p></div>
+    <button class="next-btn" id="n4" onclick="showResult()">See my results →</button>
+  </div>
+
+  <!-- RESULT -->
+  <div class="result-card" id="result">
+    <span class="result-icon" id="ri">🏆</span>
+    <h2 id="rh">Loading...</h2>
+    <div class="score-pill" id="rs">0 / 5</div>
+    <p id="rm"></p>
+    <div class="breakdown">
+      <div class="bd-item"><div class="bd-topic">Physical Health</div><div class="bd-val" id="bd0">—</div></div>
+      <div class="bd-item"><div class="bd-topic">Mental Health</div><div class="bd-val" id="bd1">—</div></div>
+      <div class="bd-item"><div class="bd-topic">Mood & Energy</div><div class="bd-val" id="bd2">—</div></div>
+      <div class="bd-item"><div class="bd-topic">Social Life</div><div class="bd-val" id="bd3">—</div></div>
+    </div>
+    <button class="restart-btn" onclick="restart()">Try again</button>
+  </div>
+
+</div>
+
+<div class="mascot" id="mascot">🦎</div>
+
+<script>
+  const correct = [1, 1, 1, 2, 2];
+  const topics = [0, 0, 1, 2, 3];
+  let score = 0;
+  let answered = new Array(5).fill(false);
+  let topicScore = [0, 0, 0, 0];
+  let topicTotal = [2, 1, 1, 1];
+
+  function ans(qi, chosen) {
+    if (answered[qi]) return;
+    answered[qi] = true;
+    const card = document.getElementById('q' + qi);
+    const btns = card.querySelectorAll('.opt');
+    btns.forEach((b, i) => {
+      b.disabled = true;
+      if (i === correct[qi]) b.classList.add('correct');
+      else if (i === chosen && chosen !== correct[qi]) b.classList.add('wrong');
+    });
+    if (chosen === correct[qi]) { score++; topicScore[topics[qi]]++; jump('celebrate'); }
+    else { jump('shake'); }
+    document.getElementById('st').textContent = 'Score: ' + score;
+    document.getElementById('e' + qi).classList.add('show');
+    document.getElementById('n' + qi).classList.add('show');
+    document.getElementById('pf').style.width = ((qi + 1) / 5 * 100) + '%';
+    document.getElementById('pt').textContent = 'Question ' + (qi + 1) + ' of 5';
+  }
+
+  function next(qi) {
+    document.getElementById('q' + qi).classList.add('hidden');
+    const nxt = document.getElementById('q' + (qi + 1));
+    nxt.classList.remove('hidden');
+    nxt.style.animation = 'none';
+    setTimeout(() => { nxt.style.animation = 'slideIn 0.4s ease'; }, 10);
+  }
+
+  function showResult() {
+    document.getElementById('q4').classList.add('hidden');
+    document.getElementById('pf').style.width = '100%';
+    const pct = Math.round((score / 5) * 100);
+    let icon, title, msg;
+    if (pct === 100) { icon = '🌿'; title = 'You are taking care of <em>yourself.</em>'; msg = 'You understand what it takes to sustain this career long term. Your students will feel the difference — a teacher who takes care of themselves shows up fully, every time.'; }
+    else if (pct >= 60) { icon = '💛'; title = 'Good <em>awareness.</em>'; msg = 'You have a solid foundation. Review the questions you missed — sometimes the most important habits are the ones that feel optional until you really need them.'; }
+    else { icon = '📚'; title = 'Take this <em>seriously.</em>'; msg = 'This module exists because burnout is real and it ends teaching careers quietly. Go back through both lessons and build at least one new habit this week — physical, mental, or social.'; }
+    document.getElementById('ri').textContent = icon;
+    document.getElementById('rh').innerHTML = title;
+    document.getElementById('rs').textContent = score + ' / 5 correct';
+    document.getElementById('rm').textContent = msg;
+    const ids = ['bd0','bd1','bd2','bd3'];
+    const tots = [2,1,1,1];
+    ids.forEach((id, i) => {
+      const el = document.getElementById(id);
+      el.textContent = topicScore[i] + ' / ' + tots[i] + ' correct';
+      el.className = 'bd-val ' + (topicScore[i] === tots[i] ? 'pass' : topicScore[i] > 0 ? '' : 'fail');
+    });
+    document.getElementById('result').classList.add('show');
+  }
+
+  function restart() {
+    score = 0; answered = new Array(5).fill(false); topicScore = [0,0,0,0];
+    document.getElementById('st').textContent = 'Score: 0';
+    document.getElementById('pf').style.width = '0%';
+    document.getElementById('pt').textContent = 'Question 1 of 5';
+    document.getElementById('result').classList.remove('show');
+    for (let i = 0; i < 5; i++) {
+      const c = document.getElementById('q' + i);
+      c.classList.add('hidden');
+      c.querySelectorAll('.opt').forEach(b => { b.disabled = false; b.className = 'opt'; });
+      document.getElementById('e' + i).classList.remove('show');
+      document.getElementById('n' + i).classList.remove('show');
+    }
+    document.getElementById('q0').classList.remove('hidden');
+  }
+
+  function jump(t) {
+    const m = document.getElementById('mascot');
+    if (t === 'celebrate') { m.style.transform = 'scale(1.4) rotate(20deg)'; setTimeout(() => { m.style.transform = 'scale(1) rotate(0)'; }, 400); }
+    else { m.textContent = '😱'; m.style.transform = 'scale(1.2)'; setTimeout(() => { m.style.transform = 'scale(1)'; setTimeout(() => { m.textContent = '🦎'; }, 600); }, 400); }
+  }
+</script>
+</body>
+</html>

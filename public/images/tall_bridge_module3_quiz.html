@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 3 Quiz — AI Tools | Tall Bridge Education</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --pd: #210635; --pr: #420D4B; --pw: #6667AB; --bl: #F5D5E0; --lm: #AADD44; --wh: #FAFAF8; --ok: #2ecc71; --no: #e74c3c; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--pd); color: var(--wh); min-height: 100vh; display: flex; flex-direction: column; }
+  .bar { background: rgba(0,0,0,0.3); padding: 12px 40px; display: flex; align-items: center; justify-content: space-between; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.08); flex-shrink: 0; }
+  .brand { font-weight: 500; color: var(--lm); letter-spacing: 0.08em; font-size: 12px; text-transform: uppercase; }
+  .tag { background: rgba(255,255,255,0.1); color: var(--bl); padding: 4px 14px; border-radius: 20px; font-size: 12px; }
+  .prog-wrap { padding: 14px 40px 0; flex-shrink: 0; }
+  .prog-lbl { display: flex; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,0.4); margin-bottom: 8px; }
+  .prog-track { height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; }
+  .prog-fill { height: 100%; background: var(--lm); border-radius: 2px; transition: width 0.5s ease; }
+  .stage { flex: 1; display: flex; align-items: center; justify-content: center; padding: 28px 40px; }
+  .quiz-card { max-width: 640px; width: 100%; animation: slideIn 0.4s ease; }
+  .quiz-card.hidden { display: none; }
+  @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .q-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+  .q-num { font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pw); }
+  .q-topic { font-size: 11px; background: rgba(102,103,171,0.2); border: 1px solid rgba(102,103,171,0.3); color: var(--pw); padding: 3px 10px; border-radius: 20px; }
+  .q-text { font-family: 'Playfair Display', serif; font-size: clamp(17px, 2.8vw, 24px); color: var(--wh); line-height: 1.35; margin-bottom: 24px; font-weight: 700; }
+  .options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+  .opt { background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 14px 18px; text-align: left; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 300; color: rgba(255,255,255,0.85); line-height: 1.5; transition: all 0.2s; display: flex; align-items: flex-start; gap: 12px; width: 100%; }
+  .opt:hover:not(:disabled) { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.25); }
+  .opt:disabled { cursor: default; }
+  .opt.correct { background: rgba(46,204,113,0.15); border-color: var(--ok); color: var(--wh); }
+  .opt.wrong { background: rgba(231,76,60,0.12); border-color: var(--no); color: rgba(255,255,255,0.45); }
+  .opt-letter { min-width: 26px; height: 26px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; flex-shrink: 0; margin-top: 1px; transition: all 0.2s; }
+  .opt.correct .opt-letter { background: var(--ok); color: #fff; }
+  .opt.wrong .opt-letter { background: var(--no); color: #fff; }
+  .explanation { background: rgba(170,221,68,0.1); border: 1px solid rgba(170,221,68,0.3); border-radius: 12px; padding: 16px 20px; display: none; animation: fadeIn 0.4s ease; }
+  .explanation.show { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+  .exp-label { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lm); margin-bottom: 6px; }
+  .explanation p { font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.7; font-weight: 300; margin: 0; }
+  .next-btn { background: var(--lm); color: var(--pd); border: none; padding: 12px 30px; border-radius: 30px; font-size: 14px; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; margin-top: 16px; transition: all 0.2s; display: none; }
+  .next-btn.show { display: inline-block; }
+  .next-btn:hover { background: #c0f050; }
+  .result-card { max-width: 560px; width: 100%; text-align: center; display: none; animation: slideIn 0.5s ease; }
+  .result-card.show { display: block; }
+  .result-icon { font-size: 60px; margin-bottom: 14px; display: block; }
+  .result-card h2 { font-family: 'Playfair Display', serif; font-size: 30px; color: var(--wh); margin-bottom: 8px; }
+  .result-card h2 em { color: var(--lm); font-style: italic; }
+  .result-card p { font-size: 15px; color: rgba(255,255,255,0.7); line-height: 1.7; margin-bottom: 10px; font-weight: 300; }
+  .score-pill { display: inline-block; background: var(--lm); color: var(--pd); font-size: 22px; font-weight: 500; padding: 11px 30px; border-radius: 40px; margin: 14px 0 20px; }
+  .breakdown { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; text-align: left; }
+  .bd-item { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px 16px; }
+  .bd-topic { font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--pw); margin-bottom: 4px; }
+  .bd-val { font-size: 13px; color: var(--wh); font-weight: 300; }
+  .bd-val.pass { color: var(--ok); }
+  .bd-val.fail { color: var(--no); }
+  .restart-btn { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: var(--wh); padding: 11px 26px; border-radius: 30px; font-size: 14px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; }
+  .restart-btn:hover { background: rgba(255,255,255,0.14); }
+  .mascot { position: fixed; bottom: 22px; right: 22px; font-size: 26px; cursor: pointer; transition: transform 0.3s; z-index: 100; }
+  .mascot:hover { transform: scale(1.2) rotate(-10deg); }
+  @media (max-width: 600px) { .stage { padding: 18px 16px; } .prog-wrap { padding: 10px 16px 0; } .bar { padding: 10px 16px; } .breakdown { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <span class="brand">Tall Bridge Education</span>
+  <span class="tag">Module 3 · AI Tools Quiz</span>
+</div>
+<div class="prog-wrap">
+  <div class="prog-lbl"><span id="pt">Question 1 of 7</span><span id="st">Score: 0</span></div>
+  <div class="prog-track"><div class="prog-fill" id="pf" style="width:0%"></div></div>
+</div>
+
+<div class="stage">
+
+  <!-- Q1 -->
+  <div class="quiz-card" id="q0">
+    <div class="q-meta"><span class="q-num">Question 1 of 7</span><span class="q-topic">AI Tools — Music</span></div>
+    <div class="q-text">A student loves singing but has very limited English vocabulary. Which AI tool would you use to turn their favourite song into an English learning experience?</div>
+    <div class="options">
+      <button class="opt" onclick="ans(0,0)"><span class="opt-letter">A</span><span>Kahoot! — to build a quiz based on the song lyrics</span></button>
+      <button class="opt" onclick="ans(0,1)"><span class="opt-letter">B</span><span>Suno AI — to generate an English version of the song using translated lyrics</span></button>
+      <button class="opt" onclick="ans(0,2)"><span class="opt-letter">C</span><span>Canva — to design a poster of the song lyrics</span></button>
+      <button class="opt" onclick="ans(0,3)"><span class="opt-letter">D</span><span>Speechace — to analyse the student's singing pronunciation</span></button>
+    </div>
+    <div class="explanation" id="e0"><div class="exp-label">Why this is correct</div><p>Suno AI generates full songs from text prompts. You can use ChatGPT to translate the meaning of the student's song into English, then paste those lyrics into Suno to create an English version the student already has an emotional connection to. Emotional connection accelerates language learning faster than any drill.</p></div>
+    <button class="next-btn" id="n0" onclick="next(0)">Next question →</button>
+  </div>
+
+  <!-- Q2 -->
+  <div class="quiz-card hidden" id="q1">
+    <div class="q-meta"><span class="q-num">Question 2 of 7</span><span class="q-topic">AI Tools — Games & Quizzes</span></div>
+    <div class="q-text">You want to make vocabulary review feel like a competition during a live class. Students should be able to see a leaderboard and race to answer in real time. Which tool is best for this?</div>
+    <div class="options">
+      <button class="opt" onclick="ans(1,0)"><span class="opt-letter">A</span><span>Quizlet — for flashcard practice</span></button>
+      <button class="opt" onclick="ans(1,1)"><span class="opt-letter">B</span><span>Kahoot! — for live competitive quiz games with real-time leaderboards</span></button>
+      <button class="opt" onclick="ans(1,2)"><span class="opt-letter">C</span><span>Canva — for designing a quiz template</span></button>
+      <button class="opt" onclick="ans(1,3)"><span class="opt-letter">D</span><span>ChatGPT — to generate the quiz questions</span></button>
+    </div>
+    <div class="explanation" id="e1"><div class="exp-label">Why this is correct</div><p>Kahoot! is built specifically for live, competitive quiz games where students race to answer and see a leaderboard update in real time. It spikes energy immediately and is one of the most effective tools for turning vocabulary review into something students actually want to do.</p></div>
+    <button class="next-btn" id="n1" onclick="next(1)">Next question →</button>
+  </div>
+
+  <!-- Q3 -->
+  <div class="quiz-card hidden" id="q2">
+    <div class="q-meta"><span class="q-num">Question 3 of 7</span><span class="q-topic">AI Tools — Lesson Planning</span></div>
+    <div class="q-text">You need to plan a 20-minute ESL lesson for a 9-year-old beginner on the topic of animals — and you need it done in under five minutes. Which AI tool handles this best?</div>
+    <div class="options">
+      <button class="opt" onclick="ans(2,0)"><span class="opt-letter">A</span><span>Wordwall — to build an animal word search</span></button>
+      <button class="opt" onclick="ans(2,1)"><span class="opt-letter">B</span><span>Suno AI — to generate an animal vocabulary song</span></button>
+      <button class="opt" onclick="ans(2,2)"><span class="opt-letter">C</span><span>MagicSchool AI or ChatGPT — to generate a complete structured lesson plan instantly</span></button>
+      <button class="opt" onclick="ans(2,3)"><span class="opt-letter">D</span><span>Diffit — to create a reading passage about animals</span></button>
+    </div>
+    <div class="explanation" id="e2"><div class="exp-label">Why this is correct</div><p>MagicSchool AI is built specifically for teachers and generates complete lesson plans — including objectives, activities, and timing — from a simple prompt. ChatGPT does the same. Both can produce a full structured plan in under two minutes, leaving you more time to actually prepare and personalize it.</p></div>
+    <button class="next-btn" id="n2" onclick="next(2)">Next question →</button>
+  </div>
+
+  <!-- Q4 -->
+  <div class="quiz-card hidden" id="q3">
+    <div class="q-meta"><span class="q-num">Question 4 of 7</span><span class="q-topic">AI Tools — Pronunciation</span></div>
+    <div class="q-text">You want to identify exactly which English sounds your student struggles with most, so you can target those in future lessons. Which tool gives you this kind of precise pronunciation analysis?</div>
+    <div class="options">
+      <button class="opt" onclick="ans(3,0)"><span class="opt-letter">A</span><span>Quizizz — it tracks student response accuracy</span></button>
+      <button class="opt" onclick="ans(3,1)"><span class="opt-letter">B</span><span>Speechace — it analyses spoken English and scores pronunciation word by word</span></button>
+      <button class="opt" onclick="ans(3,2)"><span class="opt-letter">C</span><span>Canva — you can create a pronunciation chart for the student</span></button>
+      <button class="opt" onclick="ans(3,3)"><span class="opt-letter">D</span><span>Anki — spaced repetition flashcards help with pronunciation over time</span></button>
+    </div>
+    <div class="explanation" id="e3"><div class="exp-label">Why this is correct</div><p>Speechace analyses spoken English and returns a detailed score for every word — showing you exactly which phonemes a student is mispronouncing. This turns guesswork into precision. You know exactly where to spend your teaching time.</p></div>
+    <button class="next-btn" id="n3" onclick="next(3)">Next question →</button>
+  </div>
+
+  <!-- Q5 -->
+  <div class="quiz-card hidden" id="q4">
+    <div class="q-meta"><span class="q-num">Question 5 of 7</span><span class="q-topic">AI Tools — Vocabulary</span></div>
+    <div class="q-text">You want your student to practice this week's vocabulary list independently between sessions. Which tool automatically generates flashcards, matching games, and practice tests from a word list you provide?</div>
+    <div class="options">
+      <button class="opt" onclick="ans(4,0)"><span class="opt-letter">A</span><span>Gamma — it builds presentation slides from your content</span></button>
+      <button class="opt" onclick="ans(4,1)"><span class="opt-letter">B</span><span>Twee — it generates comprehension exercises from a topic</span></button>
+      <button class="opt" onclick="ans(4,2)"><span class="opt-letter">C</span><span>Quizlet AI — it auto-generates flashcards, matching games, and tests from any word list</span></button>
+      <button class="opt" onclick="ans(4,3)"><span class="opt-letter">D</span><span>Curipod — it creates interactive lesson slides with response tracking</span></button>
+    </div>
+    <div class="explanation" id="e4"><div class="exp-label">Why this is correct</div><p>Quizlet AI takes any word list and instantly generates multiple study modes — flashcards, matching games, fill-in-the-blank, and timed tests. Sending your student a Quizlet link before class means they arrive having already encountered the vocabulary, making your live session far more productive.</p></div>
+    <button class="next-btn" id="n4" onclick="next(4)">Next question →</button>
+  </div>
+
+  <!-- Q6 -->
+  <div class="quiz-card hidden" id="q5">
+    <div class="q-meta"><span class="q-num">Question 6 of 7</span><span class="q-topic">Responsible AI Use</span></div>
+    <div class="q-text">You use ChatGPT to generate a lesson about a Chinese cultural festival. The content looks detailed and well-written. What should you do before using it in class?</div>
+    <div class="options">
+      <button class="opt" onclick="ans(5,0)"><span class="opt-letter">A</span><span>Use it immediately — ChatGPT is trained on accurate data</span></button>
+      <button class="opt" onclick="ans(5,1)"><span class="opt-letter">B</span><span>Cross-check the cultural details with at least one non-AI source before using it</span></button>
+      <button class="opt" onclick="ans(5,2)"><span class="opt-letter">C</span><span>Ask ChatGPT to verify its own content</span></button>
+      <button class="opt" onclick="ans(5,3)"><span class="opt-letter">D</span><span>Only use it if the student is a beginner who would not notice any errors</span></button>
+    </div>
+    <div class="explanation" id="e5"><div class="exp-label">Why this is correct</div><p>AI can hallucinate — producing content that sounds accurate but is factually or culturally wrong. This is especially dangerous when teaching cultural content to students from that culture. Always verify AI-generated material against a reliable non-AI source before it enters your classroom.</p></div>
+    <button class="next-btn" id="n5" onclick="next(5)">Next question →</button>
+  </div>
+
+  <!-- Q7 -->
+  <div class="quiz-card hidden" id="q6">
+    <div class="q-meta"><span class="q-num">Question 7 of 7</span><span class="q-topic">Responsible AI Use</span></div>
+    <div class="q-text">Which statement best describes the correct relationship between a teacher and AI tools?</div>
+    <div class="options">
+      <button class="opt" onclick="ans(6,0)"><span class="opt-letter">A</span><span>AI should drive the lesson — the teacher implements what AI suggests</span></button>
+      <button class="opt" onclick="ans(6,1)"><span class="opt-letter">B</span><span>AI replaces the need for lesson planning since it can generate everything on demand</span></button>
+      <button class="opt" onclick="ans(6,2)"><span class="opt-letter">C</span><span>AI is a time-saving assistant for repetitive tasks — the teacher remains in control of content, judgment, and the student relationship</span></button>
+      <button class="opt" onclick="ans(6,3)"><span class="opt-letter">D</span><span>AI should only be used for administrative tasks, never for lesson content</span></button>
+    </div>
+    <div class="explanation" id="e6"><div class="exp-label">Why this is correct</div><p>The tool is not the teacher — you are. AI handles repetitive, time-consuming tasks so you can focus on what only a human can do: reading your student, adapting in the moment, building trust, and making learning feel alive. AI prepares the stage. You perform on it.</p></div>
+    <button class="next-btn" id="n6" onclick="showResult()">See my results →</button>
+  </div>
+
+  <!-- RESULT -->
+  <div class="result-card" id="result">
+    <span class="result-icon" id="ri">🏆</span>
+    <h2 id="rh">Loading...</h2>
+    <div class="score-pill" id="rs">0 / 7</div>
+    <p id="rm"></p>
+    <div class="breakdown">
+      <div class="bd-item"><div class="bd-topic">AI Tools</div><div class="bd-val" id="bd0">—</div></div>
+      <div class="bd-item"><div class="bd-topic">Responsible AI Use</div><div class="bd-val" id="bd1">—</div></div>
+    </div>
+    <button class="restart-btn" onclick="restart()">Try again</button>
+  </div>
+
+</div>
+
+<div class="mascot" id="mascot">🦎</div>
+
+<script>
+  const correct = [1, 1, 2, 1, 2, 1, 2];
+  const topics = [0, 0, 0, 0, 0, 1, 1];
+  let score = 0;
+  let answered = new Array(7).fill(false);
+  let topicScore = [0, 0];
+  let topicTotal = [5, 2];
+
+  function ans(qi, chosen) {
+    if (answered[qi]) return;
+    answered[qi] = true;
+    const card = document.getElementById('q' + qi);
+    const btns = card.querySelectorAll('.opt');
+    btns.forEach((b, i) => {
+      b.disabled = true;
+      if (i === correct[qi]) b.classList.add('correct');
+      else if (i === chosen && chosen !== correct[qi]) b.classList.add('wrong');
+    });
+    if (chosen === correct[qi]) {
+      score++;
+      topicScore[topics[qi]]++;
+      jump('celebrate');
+    } else {
+      jump('shake');
+    }
+    document.getElementById('st').textContent = 'Score: ' + score;
+    document.getElementById('e' + qi).classList.add('show');
+    document.getElementById('n' + qi).classList.add('show');
+    document.getElementById('pf').style.width = ((qi + 1) / 7 * 100) + '%';
+    document.getElementById('pt').textContent = 'Question ' + (qi + 1) + ' of 7';
+  }
+
+  function next(qi) {
+    document.getElementById('q' + qi).classList.add('hidden');
+    const nxt = document.getElementById('q' + (qi + 1));
+    nxt.classList.remove('hidden');
+    nxt.style.animation = 'none';
+    setTimeout(() => { nxt.style.animation = 'slideIn 0.4s ease'; }, 10);
+  }
+
+  function showResult() {
+    document.getElementById('q6').classList.add('hidden');
+    document.getElementById('pf').style.width = '100%';
+    const pct = Math.round((score / 7) * 100);
+    let icon, title, msg;
+    if (pct >= 86) { icon = '🏆'; title = 'AI-ready <em>teacher.</em>'; msg = 'You know your tools and you know how to use them responsibly. That combination is rare — and it will show in your classes.'; }
+    else if (pct >= 57) { icon = '🌟'; title = 'Solid <em>foundation.</em>'; msg = 'You have a good grasp of the key tools. Review the ones you missed — knowing exactly what each tool does and when to use it will save you hours every week.'; }
+    else { icon = '📚'; title = 'Go back and <em>explore.</em>'; msg = 'The AI tools in this module are genuinely transformative when you know how to use them. Revisit the lessons, try the tools yourself, and come back to this quiz.'; }
+    document.getElementById('ri').textContent = icon;
+    document.getElementById('rh').innerHTML = title;
+    document.getElementById('rs').textContent = score + ' / 7 correct';
+    document.getElementById('rm').textContent = msg;
+    document.getElementById('bd0').textContent = topicScore[0] + ' / 5 correct';
+    document.getElementById('bd0').className = 'bd-val ' + (topicScore[0] >= 4 ? 'pass' : topicScore[0] >= 2 ? '' : 'fail');
+    document.getElementById('bd1').textContent = topicScore[1] + ' / 2 correct';
+    document.getElementById('bd1').className = 'bd-val ' + (topicScore[1] === 2 ? 'pass' : topicScore[1] === 1 ? '' : 'fail');
+    document.getElementById('result').classList.add('show');
+  }
+
+  function restart() {
+    score = 0; answered = new Array(7).fill(false); topicScore = [0, 0];
+    document.getElementById('st').textContent = 'Score: 0';
+    document.getElementById('pf').style.width = '0%';
+    document.getElementById('pt').textContent = 'Question 1 of 7';
+    document.getElementById('result').classList.remove('show');
+    for (let i = 0; i < 7; i++) {
+      const c = document.getElementById('q' + i);
+      c.classList.add('hidden');
+      c.querySelectorAll('.opt').forEach(b => { b.disabled = false; b.className = 'opt'; });
+      document.getElementById('e' + i).classList.remove('show');
+      document.getElementById('n' + i).classList.remove('show');
+    }
+    document.getElementById('q0').classList.remove('hidden');
+  }
+
+  function jump(t) {
+    const m = document.getElementById('mascot');
+    if (t === 'celebrate') { m.style.transform = 'scale(1.4) rotate(20deg)'; setTimeout(() => { m.style.transform = 'scale(1) rotate(0)'; }, 400); }
+    else { m.textContent = '😱'; m.style.transform = 'scale(1.2)'; setTimeout(() => { m.style.transform = 'scale(1)'; setTimeout(() => { m.textContent = '🦎'; }, 600); }, 400); }
+  }
+</script>
+</body>
+</html>

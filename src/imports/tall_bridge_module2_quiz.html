@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 2 Quiz | Tall Bridge Education</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --pd: #210635; --pr: #420D4B; --pw: #6667AB; --bl: #F5D5E0; --lm: #AADD44; --wh: #FAFAF8; --ok: #2ecc71; --no: #e74c3c; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--pd); color: var(--wh); min-height: 100vh; display: flex; flex-direction: column; }
+  .bar { background: rgba(0,0,0,0.3); padding: 12px 40px; display: flex; align-items: center; justify-content: space-between; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.08); flex-shrink: 0; }
+  .brand { font-weight: 500; color: var(--lm); letter-spacing: 0.08em; font-size: 12px; text-transform: uppercase; }
+  .tag { background: rgba(255,255,255,0.1); color: var(--bl); padding: 4px 14px; border-radius: 20px; font-size: 12px; }
+  .prog-wrap { padding: 14px 40px 0; flex-shrink: 0; }
+  .prog-lbl { display: flex; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,0.4); margin-bottom: 8px; }
+  .prog-track { height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; }
+  .prog-fill { height: 100%; background: var(--lm); border-radius: 2px; transition: width 0.5s ease; }
+  .stage { flex: 1; display: flex; align-items: center; justify-content: center; padding: 28px 40px; }
+  .quiz-card { max-width: 640px; width: 100%; animation: slideIn 0.4s ease; }
+  .quiz-card.hidden { display: none; }
+  @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .q-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+  .q-num { font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--pw); }
+  .q-topic { font-size: 11px; background: rgba(102,103,171,0.2); border: 1px solid rgba(102,103,171,0.3); color: var(--pw); padding: 3px 10px; border-radius: 20px; }
+  .q-text { font-family: 'Playfair Display', serif; font-size: clamp(17px, 2.8vw, 24px); color: var(--wh); line-height: 1.35; margin-bottom: 24px; font-weight: 700; }
+  .options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+  .opt { background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 14px 18px; text-align: left; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 300; color: rgba(255,255,255,0.85); line-height: 1.5; transition: all 0.2s; display: flex; align-items: flex-start; gap: 12px; width: 100%; }
+  .opt:hover:not(:disabled) { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.25); }
+  .opt:disabled { cursor: default; }
+  .opt.correct { background: rgba(46,204,113,0.15); border-color: var(--ok); color: var(--wh); }
+  .opt.wrong { background: rgba(231,76,60,0.12); border-color: var(--no); color: rgba(255,255,255,0.45); }
+  .opt-letter { min-width: 26px; height: 26px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; flex-shrink: 0; margin-top: 1px; transition: all 0.2s; }
+  .opt.correct .opt-letter { background: var(--ok); color: #fff; }
+  .opt.wrong .opt-letter { background: var(--no); color: #fff; }
+  .explanation { background: rgba(170,221,68,0.1); border: 1px solid rgba(170,221,68,0.3); border-radius: 12px; padding: 16px 20px; display: none; animation: fadeIn 0.4s ease; }
+  .explanation.show { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+  .exp-label { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lm); margin-bottom: 6px; }
+  .explanation p { font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.7; font-weight: 300; margin: 0; }
+  .next-btn { background: var(--lm); color: var(--pd); border: none; padding: 12px 30px; border-radius: 30px; font-size: 14px; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; margin-top: 16px; transition: all 0.2s; display: none; }
+  .next-btn.show { display: inline-block; }
+  .next-btn:hover { background: #c0f050; }
+  .result-card { max-width: 560px; width: 100%; text-align: center; display: none; animation: slideIn 0.5s ease; }
+  .result-card.show { display: block; }
+  .result-icon { font-size: 60px; margin-bottom: 14px; display: block; }
+  .result-card h2 { font-family: 'Playfair Display', serif; font-size: 30px; color: var(--wh); margin-bottom: 8px; }
+  .result-card h2 em { color: var(--lm); font-style: italic; }
+  .result-card p { font-size: 15px; color: rgba(255,255,255,0.7); line-height: 1.7; margin-bottom: 10px; font-weight: 300; }
+  .score-pill { display: inline-block; background: var(--lm); color: var(--pd); font-size: 22px; font-weight: 500; padding: 11px 30px; border-radius: 40px; margin: 14px 0 20px; }
+  .breakdown { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; text-align: left; }
+  .bd-item { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px 16px; }
+  .bd-topic { font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--pw); margin-bottom: 4px; }
+  .bd-val { font-size: 13px; color: var(--wh); font-weight: 300; }
+  .restart-btn { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: var(--wh); padding: 11px 26px; border-radius: 30px; font-size: 14px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; }
+  .restart-btn:hover { background: rgba(255,255,255,0.14); }
+  .mascot { position: fixed; bottom: 22px; right: 22px; font-size: 26px; cursor: pointer; transition: transform 0.3s; z-index: 100; }
+  .mascot:hover { transform: scale(1.2) rotate(-10deg); }
+  @media (max-width: 600px) { .stage { padding: 18px 16px; } .prog-wrap { padding: 10px 16px 0; } .bar { padding: 10px 16px; } .breakdown { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <span class="brand">Tall Bridge Education</span>
+  <span class="tag">Module 2 · End of Module Quiz</span>
+</div>
+<div class="prog-wrap">
+  <div class="prog-lbl"><span id="pt">Question 1 of 10</span><span id="st">Score: 0</span></div>
+  <div class="prog-track"><div class="prog-fill" id="pf" style="width:0%"></div></div>
+</div>
+
+<div class="stage" id="stage">
+
+  <div class="quiz-card" id="q0">
+    <div class="q-meta"><span class="q-num">Question 1 of 10</span><span class="q-topic">Classroom Management</span></div>
+    <div class="q-text">A student goes very quiet mid-class and stops responding. What is the best first response?</div>
+    <div class="options">
+      <button class="opt" onclick="ans(0,0)"><span class="opt-letter">A</span><span>Continue teaching and hope they re-engage on their own</span></button>
+      <button class="opt" onclick="ans(0,1)"><span class="opt-letter">B</span><span>Ask them a direct question using their name and switch to a more interactive activity</span></button>
+      <button class="opt" onclick="ans(0,2)"><span class="opt-letter">C</span><span>End the class early and reschedule</span></button>
+      <button class="opt" onclick="ans(0,3)"><span class="opt-letter">D</span><span>Raise your voice to regain their attention</span></button>
+    </div>
+    <div class="explanation" id="e0"><div class="exp-label">Why this is correct</div><p>Using the student's name makes them feel seen, and a direct question forces gentle re-engagement. Switching activity resets the energy without pressure or embarrassment.</p></div>
+    <button class="next-btn" id="n0" onclick="next(0)">Next question →</button>
+  </div>
+
+  <div class="quiz-card hidden" id="q1">
+    <div class="q-meta"><span class="q-num">Question 2 of 10</span><span class="q-topic">Classroom Management</span></div>
+    <div class="q-text">How often should you change activities during an online class to maintain a child learner's attention?</div>
+    <div class="options">
+      <button class="opt" onclick="ans(1,0)"><span class="opt-letter">A</span><span>Once per class — keep the structure consistent</span></button>
+      <button class="opt" onclick="ans(1,1)"><span class="opt-letter">B</span><span>Every 8 to 10 minutes</span></button>
+      <button class="opt" onclick="ans(1,2)"><span class="opt-letter">C</span><span>Only when the student asks for something different</span></button>
+      <button class="opt" onclick="ans(1,3)"><span class="opt-letter">D</span><span>Every 30 minutes</span></button>
+    </div>
+    <div class="explanation" id="e1"><div class="exp-label">Why this is correct</div><p>Children's online attention spans drop significantly after 8 to 10 minutes. Changing activities — even slightly — resets focus and signals that something new is coming.</p></div>
+    <button class="next-btn" id="n1" onclick="next(1)">Next question →</button>
+  </div>
+
+  <div class="quiz-card hidden" id="q2">
+    <div class="q-meta"><span class="q-num">Question 3 of 10</span><span class="q-topic">Nonverbal Communication</span></div>
+    <div class="q-text">During a class, your student starts rubbing their head and repeatedly looking away from the screen. What does this most likely communicate?</div>
+    <div class="options">
+      <button class="opt" onclick="ans(2,0)"><span class="opt-letter">A</span><span>They are excited about what they are learning</span></button>
+      <button class="opt" onclick="ans(2,1)"><span class="opt-letter">B</span><span>They are confused, overwhelmed, or mentally disengaged</span></button>
+      <button class="opt" onclick="ans(2,2)"><span class="opt-letter">C</span><span>They are ready to move to the next activity</span></button>
+      <button class="opt" onclick="ans(2,3)"><span class="opt-letter">D</span><span>Their internet connection is unstable</span></button>
+    </div>
+    <div class="explanation" id="e2"><div class="exp-label">Why this is correct</div><p>Rubbing the head and looking away are classic nonverbal signals of confusion, discomfort, or mental fatigue. A strong teacher reads these cues and pivots — slowing down, simplifying, or switching activities — before the student disengages completely.</p></div>
+    <button class="next-btn" id="n2" onclick="next(2)">Next question →</button>
+  </div>
+
+  <div class="quiz-card hidden" id="q3">
+    <div class="q-meta"><span class="q-num">Question 4 of 10</span><span class="q-topic">Nonverbal Communication</span></div>
+    <div class="q-text">Which of the following is the most effective way to show warmth and build trust with a student through a screen?</div>
+    <div class="options">
+      <button class="opt" onclick="ans(3,0)"><span class="opt-letter">A</span><span>Speak loudly so they know you are engaged</span></button>
+      <button class="opt" onclick="ans(3,1)"><span class="opt-letter">B</span><span>Maintain eye contact by looking directly into the camera and smile genuinely</span></button>
+      <button class="opt" onclick="ans(3,2)"><span class="opt-letter">C</span><span>Share your screen so they always have something to look at</span></button>
+      <button class="opt" onclick="ans(3,3)"><span class="opt-letter">D</span><span>Use formal language to appear professional</span></button>
+    </div>
+    <div class="explanation" id="e3"><div class="exp-label">Why this is correct</div><p>Looking into the camera creates the sensation of eye contact for the student. Combined with a genuine smile, this communicates warmth, safety, and presence — all of which are essential for a child to feel comfortable learning.</p></div>
+    <button class="next-btn" id="n3" onclick="next(3)">Next question →</button>
+  </div>
+
+  <div class="quiz-card hidden" id="q4">
+    <div class="q-meta"><span class="q-num">Question 5 of 10</span><span class="q-topic">Verbal Communication</span></div>
+    <div class="q-text">Your student is a beginner with very limited English. How should you adjust your spoken English when teaching them?</div>
+    <div class="options">
+      <button class="opt" onclick="ans(4,0)"><span class="opt-letter">A</span><span>Speak in slurred or simplified broken English so they can follow more easily</span></button>
+      <button class="opt" onclick="ans(4,1)"><span class="opt-letter">B</span><span>Speak naturally but clearly — with slower pace, deliberate pronunciation, and simple vocabulary</span></button>
+      <button class="opt" onclick="ans(4,2)"><span class="opt-letter">C</span><span>Speak at your normal speed so they are exposed to real English from the start</span></button>
+      <button class="opt" onclick="ans(4,3)"><span class="opt-letter">D</span><span>Avoid speaking too much and rely mainly on written instructions</span></button>
+    </div>
+    <div class="explanation" id="e4"><div class="exp-label">Why this is correct</div><p>You should never speak in broken or slurred English — this teaches incorrect patterns. Instead, speak naturally but with deliberate clarity: slow your pace, enunciate carefully, use simple words, and repeat key phrases. You are modelling the language they are learning to speak.</p></div>
+    <button class="next-btn" id="n4" onclick="next(4)">Next question →</button>
+  </div>
+
+  <div class="quiz-card hidden" id="q5">
+    <div class="q-meta"><span class="q-num">Question 6 of 10</span><span class="q-topic">Verbal Communication</span></div>
+    <div class="q-text">Which question is more likely to generate a full sentence response from a student?</div>
+    <div class="options">
+      <button class="opt" onclick="ans(5,0)"><span class="opt-letter">A</span><span>"Do you understand?"</span></button>
+      <button class="opt" onclick="ans(5,1)"><span class="opt-letter">B</span><span>"Is this easy or hard?"</span></button>
+      <button class="opt" onclick="ans(5,2)"><span class="opt-letter">C</span><span>"Can you use that word in a sentence for me?"</span></button>
+      <button class="opt" onclick="ans(5,3)"><span class="opt-letter">D</span><span>"Did you get it?"</span></button>
+    </div>
+    <div class="explanation" id="e5"><div class="exp-label">Why this is correct</div><p>"Do you understand?" and "Did you get it?" almost always produce a yes — even when the student does not understand. Asking them to USE the word in a sentence requires actual application, which reveals true comprehension and produces a full verbal response.</p></div>
+    <button class="next-btn" id="n5" onclick="next(5)">Next question →</button>
+  </div>
+
+  <div class="quiz-card hidden" id="q6">
+    <div class="q-meta"><span class="q-num">Question 7 of 10</span><span class="q-topic">Vocal Delivery</span></div>
+    <div class="q-text">A teacher speaks every sentence at the same speed, same volume, and same pitch throughout the class. What is the most likely effect on the student?</div>
+    <div class="options">
+      <button class="opt" onclick="ans(6,0)"><span class="opt-letter">A</span><span>The student feels calm and focused throughout</span></button>
+      <button class="opt" onclick="ans(6,1)"><span class="opt-letter">B</span><span>The student finds it easier to follow because the tone is consistent</span></button>
+      <button class="opt" onclick="ans(6,2)"><span class="opt-letter">C</span><span>The student's attention drifts because there is no vocal variation to track</span></button>
+      <button class="opt" onclick="ans(6,3)"><span class="opt-letter">D</span><span>The student learns better because they are not distracted by tone changes</span></button>
+    </div>
+    <div class="explanation" id="e6"><div class="exp-label">Why this is correct</div><p>Monotonous delivery gives the brain nothing to hold onto. Without variation in pitch, pace, or stress, the mind disengages and wanders. Vocal variety — rising for excitement, slowing for emphasis, pausing for impact — is what keeps a listener present and attentive.</p></div>
+    <button class="next-btn" id="n6" onclick="next(6)">Next question →</button>
+  </div>
+
+  <div class="quiz-card hidden" id="q7">
+    <div class="q-meta"><span class="q-num">Question 8 of 10</span><span class="q-topic">Vocal Delivery</span></div>
+    <div class="q-text">Which technique best describes stressing certain words in a sentence to direct a student's attention?</div>
+    <div class="options">
+      <button class="opt" onclick="ans(7,0)"><span class="opt-letter">A</span><span>Articulation</span></button>
+      <button class="opt" onclick="ans(7,1)"><span class="opt-letter">B</span><span>Stress patterns</span></button>
+      <button class="opt" onclick="ans(7,2)"><span class="opt-letter">C</span><span>Pausing</span></button>
+      <button class="opt" onclick="ans(7,3)"><span class="opt-letter">D</span><span>Pacing</span></button>
+    </div>
+    <div class="explanation" id="e7"><div class="exp-label">Why this is correct</div><p>Stress patterns refer to deliberately emphasising certain words to signal importance. For example: "Open your book to page FIVE" tells the student exactly where to focus. Stress patterns are a core tool of effective vocal delivery in teaching.</p></div>
+    <button class="next-btn" id="n7" onclick="next(7)">Next question →</button>
+  </div>
+
+  <div class="quiz-card hidden" id="q8">
+    <div class="q-meta"><span class="q-num">Question 9 of 10</span><span class="q-topic">Lesson Planning</span></div>
+    <div class="q-text">What is the primary purpose of a lesson plan before teaching an online class?</div>
+    <div class="options">
+      <button class="opt" onclick="ans(8,0)"><span class="opt-letter">A</span><span>To show the employer you are professional</span></button>
+      <button class="opt" onclick="ans(8,1)"><span class="opt-letter">B</span><span>To give you a rigid script to follow word for word</span></button>
+      <button class="opt" onclick="ans(8,2)"><span class="opt-letter">C</span><span>To structure the class so students follow, retain, and progress — while giving you flexibility to adapt</span></button>
+      <button class="opt" onclick="ans(8,3)"><span class="opt-letter">D</span><span>To make sure you cover the maximum amount of content in each session</span></button>
+    </div>
+    <div class="explanation" id="e8"><div class="exp-label">Why this is correct</div><p>A lesson plan provides structure and intention — but it is not a rigid script. It guides the flow, ensures progression, and allows the teacher to be present rather than improvising. The plan serves the student, not the teacher's ego.</p></div>
+    <button class="next-btn" id="n8" onclick="next(8)">Next question →</button>
+  </div>
+
+  <div class="quiz-card hidden" id="q9">
+    <div class="q-meta"><span class="q-num">Question 10 of 10</span><span class="q-topic">Lesson Planning</span></div>
+    <div class="q-text">When planning a lesson for a student you have taught before, what is the most important starting point?</div>
+    <div class="options">
+      <button class="opt" onclick="ans(9,0)"><span class="opt-letter">A</span><span>Review what topics you find most interesting to teach</span></button>
+      <button class="opt" onclick="ans(9,1)"><span class="opt-letter">B</span><span>Review what the student struggled with last session and build from there</span></button>
+      <button class="opt" onclick="ans(9,2)"><span class="opt-letter">C</span><span>Start fresh each time so the student is not reminded of previous mistakes</span></button>
+      <button class="opt" onclick="ans(9,3)"><span class="opt-letter">D</span><span>Follow the textbook in order regardless of the student's progress</span></button>
+    </div>
+    <div class="explanation" id="e9"><div class="exp-label">Why this is correct</div><p>Great lesson planning is student-centred. Reviewing what the student found difficult in the previous session allows you to address gaps, build confidence, and ensure real progression — rather than simply moving through material.</p></div>
+    <button class="next-btn" id="n9" onclick="showResult()">See my results →</button>
+  </div>
+
+  <!-- RESULT -->
+  <div class="result-card" id="result">
+    <span class="result-icon" id="ri">🏆</span>
+    <h2 id="rh">Loading...</h2>
+    <div class="score-pill" id="rs">0 / 10</div>
+    <p id="rm"></p>
+    <div class="breakdown">
+      <div class="bd-item"><div class="bd-topic">Classroom Management</div><div class="bd-val" id="bd0">—</div></div>
+      <div class="bd-item"><div class="bd-topic">Nonverbal Communication</div><div class="bd-val" id="bd1">—</div></div>
+      <div class="bd-item"><div class="bd-topic">Verbal Communication</div><div class="bd-val" id="bd2">—</div></div>
+      <div class="bd-item"><div class="bd-topic">Vocal Delivery</div><div class="bd-val" id="bd3">—</div></div>
+      <div class="bd-item" style="grid-column: span 2;"><div class="bd-topic">Lesson Planning</div><div class="bd-val" id="bd4">—</div></div>
+    </div>
+    <button class="restart-btn" onclick="restart()">Try again</button>
+  </div>
+
+</div>
+
+<div class="mascot" id="mascot">🦎</div>
+
+<script>
+  // correct answers: index of correct option for each question
+  const correct = [1, 1, 1, 1, 1, 2, 2, 1, 2, 1];
+  // topic index for each question (for breakdown)
+  const topics = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4];
+  const topicNames = ['Classroom Management','Nonverbal Communication','Verbal Communication','Vocal Delivery','Lesson Planning'];
+
+  let score = 0;
+  let answered = new Array(10).fill(false);
+  let topicScore = [0,0,0,0,0];
+  let topicTotal = [2,2,2,2,2];
+
+  function ans(qi, chosen) {
+    if (answered[qi]) return;
+    answered[qi] = true;
+    const card = document.getElementById('q' + qi);
+    const btns = card.querySelectorAll('.opt');
+    btns.forEach((b, i) => {
+      b.disabled = true;
+      if (i === correct[qi]) b.classList.add('correct');
+      else if (i === chosen && chosen !== correct[qi]) b.classList.add('wrong');
+    });
+    if (chosen === correct[qi]) {
+      score++;
+      topicScore[topics[qi]]++;
+      jump('celebrate');
+    } else {
+      jump('shake');
+    }
+    document.getElementById('st').textContent = 'Score: ' + score;
+    document.getElementById('e' + qi).classList.add('show');
+    document.getElementById('n' + qi).classList.add('show');
+    document.getElementById('pf').style.width = ((qi + 1) / 10 * 100) + '%';
+    document.getElementById('pt').textContent = 'Question ' + (qi + 1) + ' of 10';
+  }
+
+  function next(qi) {
+    document.getElementById('q' + qi).classList.add('hidden');
+    document.getElementById('q' + (qi + 1)).classList.remove('hidden');
+    document.getElementById('q' + (qi + 1)).style.animation = 'none';
+    setTimeout(() => { document.getElementById('q' + (qi + 1)).style.animation = 'slideIn 0.4s ease'; }, 10);
+  }
+
+  function showResult() {
+    document.getElementById('q9').classList.add('hidden');
+    document.getElementById('pf').style.width = '100%';
+    const pct = Math.round((score / 10) * 100);
+    let icon, title, msg;
+    if (pct >= 90) { icon = '🏆'; title = 'Outstanding <em>result.</em>'; msg = 'You have a strong grasp of what it takes to communicate effectively in an online classroom. Your students are in good hands.'; }
+    else if (pct >= 70) { icon = '🌟'; title = 'Really <em>solid.</em>'; msg = 'You understand the core principles well. Review the questions you missed — there is insight in each explanation that will sharpen you further.'; }
+    else if (pct >= 50) { icon = '💪'; title = 'Good <em>start.</em>'; msg = 'You have the foundation. Go back through the lessons where you dropped points — verbal communication, vocal delivery, and classroom management will make or break your classes.'; }
+    else { icon = '📚'; title = 'Keep <em>going.</em>'; msg = 'Do not be discouraged. Review the lessons and come back to the quiz. Every question you missed is a teaching skill you are about to gain.'; }
+
+    document.getElementById('ri').textContent = icon;
+    document.getElementById('rh').innerHTML = title;
+    document.getElementById('rs').textContent = score + ' / 10 correct';
+    document.getElementById('rm').textContent = msg;
+
+    for (let i = 0; i < 5; i++) {
+      const el = document.getElementById('bd' + i);
+      el.textContent = topicScore[i] + ' / ' + topicTotal[i] + ' correct';
+      el.className = 'bd-val ' + (topicScore[i] === topicTotal[i] ? 'pass' : topicScore[i] > 0 ? '' : 'fail');
+    }
+    document.getElementById('result').classList.add('show');
+  }
+
+  function restart() {
+    score = 0; answered = new Array(10).fill(false); topicScore = [0,0,0,0,0];
+    document.getElementById('st').textContent = 'Score: 0';
+    document.getElementById('pf').style.width = '0%';
+    document.getElementById('pt').textContent = 'Question 1 of 10';
+    document.getElementById('result').classList.remove('show');
+    for (let i = 0; i < 10; i++) {
+      const c = document.getElementById('q' + i);
+      c.classList.add('hidden');
+      c.querySelectorAll('.opt').forEach(b => { b.disabled = false; b.className = 'opt'; });
+      document.getElementById('e' + i).classList.remove('show');
+      document.getElementById('n' + i).classList.remove('show');
+    }
+    document.getElementById('q0').classList.remove('hidden');
+  }
+
+  function jump(t) {
+    const m = document.getElementById('mascot');
+    if (t === 'celebrate') { m.style.transform = 'scale(1.4) rotate(20deg)'; setTimeout(() => { m.style.transform = 'scale(1) rotate(0)'; }, 400); }
+    else { m.textContent = '😱'; m.style.transform = 'scale(1.2)'; setTimeout(() => { m.style.transform = 'scale(1)'; setTimeout(() => { m.textContent = '🦎'; }, 600); }, 400); }
+  }
+</script>
+</body>
+</html>

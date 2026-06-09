@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Managing Me — Lesson 2: Your Mind & Social Life | Toll Bridge Education</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --purple-deep: #210635;
+    --purple-rich: #420D4B;
+    --purple-mid: #7B337E;
+    --periwinkle: #6667AB;
+    --blush: #F5D5E0;
+    --lime: #AADD44;
+    --white: #FAFAF8;
+    --text: #1a1a2e;
+    --muted: #5a5a7a;
+  }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--white);
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 17px;
+    font-weight: 300;
+  }
+  .course-bar {
+    background: var(--purple-deep);
+    padding: 12px 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 13px; position: sticky; top: 0; z-index: 100;
+  }
+  .brand { font-weight: 500; color: var(--lime); letter-spacing: 0.08em; font-size: 12px; text-transform: uppercase; }
+  .lesson-tag { background: rgba(255,255,255,0.1); color: var(--blush); padding: 4px 14px; border-radius: 20px; font-size: 12px; }
+  .progress-bar { height: 3px; background: var(--purple-rich); position: sticky; top: 41px; z-index: 99; }
+  .progress-fill { height: 100%; width: 0%; background: var(--lime); transition: width 0.1s; }
+
+  .hero {
+    background: var(--purple-deep);
+    padding: 80px 40px 60px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before { content: ''; position: absolute; top: -60px; right: -60px; width: 300px; height: 300px; border-radius: 50%; background: var(--purple-rich); opacity: 0.4; }
+  .hero::after { content: ''; position: absolute; bottom: -80px; left: 20%; width: 200px; height: 200px; border-radius: 50%; background: var(--purple-mid); opacity: 0.2; }
+  .hero-inner { max-width: 720px; margin: 0 auto; position: relative; z-index: 1; }
+  .module-label { font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--periwinkle); margin-bottom: 16px; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 52px); color: var(--white); line-height: 1.15; margin-bottom: 20px; font-weight: 700; }
+  .hero h1 em { font-style: italic; color: var(--blush); }
+  .hero-sub { font-size: 16px; color: var(--blush); opacity: 0.8; font-weight: 300; max-width: 500px; line-height: 1.6; }
+  .read-time { display: inline-flex; align-items: center; gap: 6px; margin-top: 24px; font-size: 13px; color: var(--periwinkle); background: rgba(102,103,171,0.15); padding: 6px 14px; border-radius: 20px; }
+
+  .content { max-width: 680px; margin: 0 auto; padding: 60px 40px 80px; }
+  .content p { margin-bottom: 1.5rem; color: var(--text); font-weight: 300; }
+  .content p strong { font-weight: 500; color: var(--purple-deep); }
+  .content p em { color: var(--purple-mid); font-style: normal; font-weight: 400; }
+
+  .section-heading { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--purple-deep); margin: 3rem 0 1.5rem; font-weight: 700; }
+  .section-sub { font-size: 15px; color: var(--muted); margin-bottom: 1.5rem; font-weight: 300; line-height: 1.7; }
+  .divider { border: none; border-top: 1px solid var(--blush); margin: 3rem 0; }
+
+  .pull-quote {
+    background: var(--purple-deep); color: var(--white);
+    border-radius: 16px; padding: 40px 44px; margin: 3rem 0;
+    position: relative; overflow: hidden;
+  }
+  .pull-quote::before { content: '\201C'; font-family: 'Playfair Display', serif; font-size: 120px; color: var(--purple-rich); position: absolute; top: -10px; left: 20px; line-height: 1; }
+  .pull-quote p { font-family: 'Playfair Display', serif; font-size: clamp(18px, 3vw, 24px); line-height: 1.5; color: var(--blush); position: relative; z-index: 1; margin: 0; font-style: italic; }
+
+  .highlight-box { background: var(--blush); border-radius: 12px; padding: 28px 32px; margin: 2.5rem 0; }
+  .highlight-box p { color: var(--purple-deep); font-weight: 400; margin: 0; font-size: 15px; line-height: 1.75; }
+  .highlight-box p strong { font-weight: 500; }
+
+  /* SCENARIO CARDS */
+  .scenario { background: #fafaf8; border: 0.5px solid #e0ddd8; border-radius: 14px; padding: 24px 28px; margin: 1.5rem 0; }
+  .scenario-label { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--periwinkle); margin-bottom: 10px; }
+  .scenario-text { font-size: 15px; color: var(--text); line-height: 1.75; font-weight: 300; }
+  .scenario-text strong { color: var(--purple-deep); font-weight: 500; }
+
+  /* TIP CARDS */
+  .tip-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 2rem 0; }
+  .tip-card { background: #fafaf8; border: 0.5px solid #e0ddd8; border-radius: 14px; padding: 22px; }
+  .tip-emoji { font-size: 32px; margin-bottom: 12px; display: block; }
+  .tip-title { font-size: 15px; font-weight: 500; color: var(--purple-deep); margin-bottom: 8px; }
+  .tip-body { font-size: 14px; color: var(--muted); line-height: 1.65; font-weight: 300; }
+  .tip-body strong { color: var(--text); font-weight: 500; }
+
+  /* CHECKLIST */
+  .check-list { display: flex; flex-direction: column; gap: 0; margin: 2rem 0; border: 0.5px solid #e0ddd8; border-radius: 16px; overflow: hidden; }
+  .check-item { display: flex; align-items: flex-start; gap: 14px; padding: 18px 22px; border-bottom: 0.5px solid #e0ddd8; background: var(--white); }
+  .check-item:last-child { border-bottom: none; }
+  .check-item:nth-child(even) { background: #fafaf8; }
+  .check-dot { min-width: 10px; height: 10px; border-radius: 50%; background: var(--lime); margin-top: 7px; flex-shrink: 0; }
+  .check-body { flex: 1; font-size: 14px; color: var(--text); line-height: 1.65; font-weight: 300; }
+  .check-body strong { font-weight: 500; color: var(--purple-deep); }
+
+  /* STANZA */
+  .stanza { margin: 2rem 0; padding-left: 24px; border-left: 2px solid var(--blush); }
+  .stanza p { margin-bottom: 0.4rem; color: var(--muted); font-style: italic; font-size: 16px; }
+
+  /* CALLOUT */
+  .callout { background: #f5f5f0; border-radius: 16px; padding: 28px 32px; margin: 3rem 0; border: 0.5px solid #e0ddd8; }
+  .callout p { font-size: 15px; color: var(--muted); margin: 0; line-height: 1.75; }
+  .callout p em { color: var(--purple-deep); font-style: normal; font-weight: 500; }
+
+  /* MOOD TOOLS */
+  .mood-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 2rem 0; }
+  .mood-card { background: var(--purple-deep); border-radius: 14px; padding: 22px; }
+  .mood-emoji { font-size: 28px; margin-bottom: 10px; display: block; }
+  .mood-title { font-size: 14px; font-weight: 500; color: var(--lime); margin-bottom: 6px; }
+  .mood-body { font-size: 13px; color: rgba(255,255,255,0.65); line-height: 1.6; font-weight: 300; }
+
+  /* NAV */
+  .nav-footer { background: var(--purple-deep); padding: 40px; display: flex; align-items: center; justify-content: space-between; }
+  .nav-footer .prev { font-size: 14px; color: var(--blush); opacity: 0.6; text-decoration: none; }
+  .next-btn { background: var(--lime); color: var(--purple-deep); border: none; padding: 14px 32px; border-radius: 30px; font-size: 15px; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: transform 0.2s; }
+  .next-btn:hover { transform: translateY(-2px); }
+  .mascot { position: fixed; bottom: 24px; right: 24px; font-size: 32px; cursor: pointer; transition: transform 0.3s; z-index: 200; }
+  .mascot:hover { transform: scale(1.1) rotate(-5deg); }
+
+  @media (max-width: 600px) {
+    .hero { padding: 60px 24px 40px; }
+    .content { padding: 40px 24px 60px; }
+    .pull-quote { padding: 28px 24px; }
+    .nav-footer { padding: 24px; flex-direction: column; align-items: flex-start; gap: 16px; }
+    .course-bar { padding: 12px 20px; }
+    .tip-grid { grid-template-columns: 1fr; }
+    .mood-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="course-bar">
+  <span class="brand">Toll Bridge Education</span>
+  <span class="lesson-tag">Managing Me · Lesson 2 — Your Mind & Social Life</span>
+</div>
+<div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="module-label">Managing Me · Lesson 2 — Reading Material</div>
+    <h1>Your mind and<br><em>your people.</em></h1>
+    <p class="hero-sub">The physical cost of remote teaching is visible. The mental and social cost is quieter — and often more dangerous. This lesson is about protecting both.</p>
+    <div class="read-time">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      12 min read
+    </div>
+  </div>
+</div>
+
+<div class="content">
+
+  <p>Nobody warns you about the emotional weight of this job. Before you started, you thought about the platform, the certificate, the students, the pay. You thought about how to teach well and how to get hired.</p>
+
+  <p>You probably did not think about the Tuesday afternoon when you finish your sixth class of the day and realise you have not spoken to a friend in four days. Or the morning when you wake up completely flat — and you have three classes starting in an hour and a child who needs your full warmth and energy on the other side of the screen.</p>
+
+  <p>This is the reality of remote teaching that the income potential does not advertise. <strong>And it is real, it is common, and it is manageable — if you know what you are dealing with.</strong></p>
+
+  <div class="pull-quote">
+    <p>You are in the business of transferring energy. If yours runs out, you have nothing left to give. Protecting your mental health is not selfishness. It is professionalism.</p>
+  </div>
+
+  <h2 class="section-heading">The emotional demands nobody talks about</h2>
+
+  <p class="section-sub">Teaching is emotional labour. You are not just presenting information — you are managing another human being's emotional state, confidence, frustration, and engagement, simultaneously with your own.</p>
+
+  <div class="scenario">
+    <div class="scenario-label">Scenario — a real teaching day</div>
+    <div class="scenario-text">You wake up at 6am for a Beijing time class. The student is difficult today — disengaged, giving one-word answers, clearly not in the mood. You spend forty-five minutes carrying the entire session on your own energy. The class ends. You have twenty minutes before your next student. You feel depleted. You smile anyway. You start again. By your fourth class, you are teaching on fumes. But the child on the other side of the screen does not know that. <strong>They just need their teacher.</strong></div>
+  </div>
+
+  <p>This is the hidden cost of being a good teacher. You absorb the difficult days. You manage your own emotions while managing theirs. And you do it alone — without the staffroom, without a colleague to debrief with, without anyone who truly understands what your day looks like.</p>
+
+  <p>Over time, without the right practices in place, this becomes burnout.</p>
+
+  <hr class="divider">
+
+  <h2 class="section-heading">Burnout — what it actually looks like</h2>
+
+  <p class="section-sub">Burnout does not arrive suddenly. It creeps in slowly, disguised as tiredness. Here are the signs to watch for:</p>
+
+  <div class="check-list">
+    <div class="check-item">
+      <div class="check-dot"></div>
+      <div class="check-body"><strong>Dreading classes you used to enjoy.</strong> When teaching stops feeling meaningful and starts feeling like just getting through it — something needs to change.</div>
+    </div>
+    <div class="check-item">
+      <div class="check-dot"></div>
+      <div class="check-body"><strong>Losing patience faster than usual.</strong> A student's repeated mistake that you used to handle gracefully now makes you internally frustrated. Your tolerance has shrunk.</div>
+    </div>
+    <div class="check-item">
+      <div class="check-dot"></div>
+      <div class="check-body"><strong>Going through the motions.</strong> Your classes are technically fine but you are not really present. You are doing the job without being in the job.</div>
+    </div>
+    <div class="check-item">
+      <div class="check-dot"></div>
+      <div class="check-body"><strong>Emotional numbness outside of work.</strong> You finish teaching and feel nothing — not relieved, not satisfied, just empty. Like a battery that no longer holds charge.</div>
+    </div>
+    <div class="check-item">
+      <div class="check-dot"></div>
+      <div class="check-body"><strong>Difficulty switching off.</strong> You lie awake thinking about a difficult class, a student's progress, or your schedule. The job follows you into rest.</div>
+    </div>
+  </div>
+
+  <p>If you recognise three or more of these — you are not weak. You are human. And you need to make changes now, before it compounds.</p>
+
+  <hr class="divider">
+
+  <h2 class="section-heading">Protecting your mental health — practical tools</h2>
+
+  <div class="tip-grid">
+    <div class="tip-card">
+      <span class="tip-emoji">✍️</span>
+      <div class="tip-title">Write it down after hard classes</div>
+      <div class="tip-body">Not for anyone else. Just for you. Three sentences about what happened, what you felt, and what you will do differently. <strong>Writing externalises what you are carrying internally.</strong> It makes it lighter.</div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-emoji">🔔</span>
+      <div class="tip-title">Build a between-class ritual</div>
+      <div class="tip-body">Two minutes between every session — a specific song, three deep breaths, a short walk to the window. Something that tells your nervous system: <strong>that class is done. I am resetting.</strong> Without this, every class bleeds into the next.</div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-emoji">🏆</span>
+      <div class="tip-title">Celebrate your wins — deliberately</div>
+      <div class="tip-body">A student finally got a word they had been struggling with. A parent sent feedback. You handled a genuinely difficult moment with grace. <strong>These moments are easy to miss when you are rushing.</strong> Notice them. Name them. They are the fuel that keeps this sustainable.</div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-emoji">⏰</span>
+      <div class="tip-title">Set a hard stop time — and keep it</div>
+      <div class="tip-body">Decide when your teaching day ends. Then close the laptop and leave it closed. <strong>Without a physical commute to mark the transition, remote work expands to fill every hour.</strong> Your evening belongs to you. Protect it the same way you protect your class schedule.</div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-emoji">🛑</span>
+      <div class="tip-title">Take real days off — without guilt</div>
+      <div class="tip-body">Rest is not laziness. It is maintenance. A car that never stops for fuel eventually stops on the road. <strong>Schedule one full day off per week</strong> where you do not check messages, do not plan lessons, do not think about the job. Let yourself actually stop.</div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-emoji">🧠</span>
+      <div class="tip-title">Know when to ask for help</div>
+      <div class="tip-body">If you have been consistently low, anxious, or emotionally exhausted for more than two to three weeks — talk to someone. A friend, a mentor, a therapist. <strong>Teaching requires you to show up for others. You cannot do that if no one is showing up for you.</strong></div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <h2 class="section-heading">Managing your mood on hard teaching days</h2>
+
+  <p class="section-sub">Some days you simply do not have it. You are tired, or sad, or dealing with something personal — and in forty minutes, a child is waiting on the other side of a screen who needs your full energy. Here is what actually works:</p>
+
+  <div class="mood-grid">
+    <div class="mood-card">
+      <span class="mood-emoji">🎵</span>
+      <div class="mood-title">Music — five minutes before class</div>
+      <div class="mood-body">Play something that energises you. Music changes your physiological state faster than almost anything else. Pick one song. Make it your pre-class ritual.</div>
+    </div>
+    <div class="mood-card">
+      <span class="mood-emoji">🌬️</span>
+      <div class="mood-title">Box breathing — two minutes</div>
+      <div class="mood-body">Breathe in for four counts. Hold for four. Out for four. Hold for four. Two rounds. This activates your parasympathetic nervous system and brings you back into your body before a difficult class.</div>
+    </div>
+    <div class="mood-card">
+      <span class="mood-emoji">💬</span>
+      <div class="mood-title">Name it out loud</div>
+      <div class="mood-body">"Today is hard and I am showing up anyway." Naming the difficulty takes away some of its weight. You are not pretending it is not there — you are choosing to show up despite it.</div>
+    </div>
+    <div class="mood-card">
+      <span class="mood-emoji">🌟</span>
+      <div class="mood-title">Remember a specific win</div>
+      <div class="mood-body">Think of one student who improved because of you. One parent who trusted you. One moment that reminded you why this work matters. That memory is powerful fuel on empty days.</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <h2 class="section-heading">Your social life — the invisible cost</h2>
+
+  <p>This is the thing nobody warns you about. You are indoors for most of your working day. Your schedule is built around Beijing time — which means you are often awake when others sleep and unavailable when others are free. Your "colleagues" are on the other side of a screen in another country.</p>
+
+  <p>Slowly, without noticing, your world gets smaller.</p>
+
+  <div class="stanza">
+    <p>The calls you stop making because you are always tired.</p>
+    <p>The dinners you miss because of an evening class.</p>
+    <p>The friendships that quietly fade because you were never available.</p>
+    <p>The creeping feeling that nobody really understands what your day looks like.</p>
+  </div>
+
+  <p>This is not a personality failing. It is the structural reality of remote work — and ESL teaching in particular. <strong>You have to fight for your social life deliberately, because the job will not leave space for it automatically.</strong></p>
+
+  <div class="highlight-box">
+    <p>Human connection is not a luxury for a teacher. It is a professional necessity. <strong>A teacher who feels isolated, unseen, and disconnected cannot bring warmth to a classroom.</strong> You need to be filled up so you can give out.</p>
+  </div>
+
+  <h2 class="section-heading">How to protect your social life as a remote ESL teacher</h2>
+
+  <div class="check-list">
+    <div class="check-item">
+      <div class="check-dot"></div>
+      <div class="check-body"><strong>Join a community of teachers.</strong> Online forums, Facebook groups, WhatsApp communities of ESL teachers. People who understand exactly what your day looks like. The shared experience is grounding — and sometimes a message from someone who just gets it is all you need.</div>
+    </div>
+    <div class="check-item">
+      <div class="check-dot"></div>
+      <div class="check-body"><strong>Block non-teaching social time in your calendar.</strong> Treat it like a booked class. Do not cancel it for a student, do not reschedule it for money, do not let it slip because you are tired. Show up for the people in your life the same way you show up for your students.</div>
+    </div>
+    <div class="check-item">
+      <div class="check-dot"></div>
+      <div class="check-body"><strong>Work from outside sometimes.</strong> A coworking space, a café, a library — anywhere with other humans present. You do not need to interact with them. The ambient presence of other people significantly reduces the isolation of remote work. It reminds your nervous system that you are not alone.</div>
+    </div>
+    <div class="check-item">
+      <div class="check-dot"></div>
+      <div class="check-body"><strong>Share your work with people who care.</strong> Not to complain — but to be known. Tell your friend about the student who finally got it. Tell your family what your day actually looks like. Visibility is connection. When the people in your life understand your work, they can support you properly.</div>
+    </div>
+    <div class="check-item">
+      <div class="check-dot"></div>
+      <div class="check-body"><strong>Create morning or evening rituals with someone.</strong> A daily voice note to a friend. A weekly walk with a family member. A standing video call every Sunday. Small consistent social rituals that do not depend on you having a free day.</div>
+    </div>
+    <div class="check-item">
+      <div class="check-dot"></div>
+      <div class="check-body"><strong>Be honest about your schedule.</strong> Tell the people you care about when you are available and when you are not. Do not apologise for your hours — just communicate them. Relationships survive unusual schedules. They do not survive unexplained disappearances.</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <h2 class="section-heading">Staying motivated for the long run</h2>
+
+  <p>The initial excitement of earning from teaching fades. That is normal. What replaces it has to be something deeper — a relationship with the work itself, not just the outcome of the work.</p>
+
+  <div class="tip-grid">
+    <div class="tip-card">
+      <span class="tip-emoji">📈</span>
+      <div class="tip-title">Track your growth</div>
+      <div class="tip-body">Keep a simple teaching journal. Note what went well each week. Note what improved. On demotivating days, reading back through three months of entries shows you how far you have come — and that is one of the most powerful motivators there is.</div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-emoji">🎯</span>
+      <div class="tip-title">Set goals beyond income</div>
+      <div class="tip-body">A number of students. A teaching skill you want to master. A new platform you want to conquer. A community you want to build. Income motivates you to start. Purpose keeps you going.</div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-emoji">👩‍🏫</span>
+      <div class="tip-title">Invest in your own learning</div>
+      <div class="tip-body">Read about teaching. Watch other teachers. Take a course on something adjacent — storytelling, public speaking, child psychology. Growing as a professional reignites the spark that routine can extinguish.</div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-emoji">💛</span>
+      <div class="tip-title">Remember who you are doing this for</div>
+      <div class="tip-body">On the hardest days — the flat days, the difficult student days, the lonely days — come back to why you started. The life you are building. The independence you are creating. The students who genuinely benefit from your presence.</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <p>Your assignment: <em>Write down three commitments — one for your mental health, one for your social life, and one for your long-term motivation.</em> Not aspirations. Specific, scheduled, real commitments. Put them in your calendar. Hold yourself to them the same way you would hold a student to their learning goals.</p>
+  </div>
+
+</div>
+
+<div class="nav-footer">
+  <a href="#" class="prev">← Back to Lesson 1</a>
+  <button class="next-btn">Take the module quiz →</button>
+</div>
+
+<div class="mascot">🦎</div>
+
+<script>
+  window.addEventListener('scroll', () => {
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const scrollHeight = doc.scrollHeight - doc.clientHeight;
+    const progress = (scrollTop / scrollHeight) * 100;
+    document.getElementById('progress').style.width = progress + '%';
+  });
+</script>
+</body>
+</html>

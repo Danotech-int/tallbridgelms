@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Managing Me — Lesson 1: Your Body | Toll Bridge Education</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --purple-deep: #210635;
+    --purple-rich: #420D4B;
+    --purple-mid: #7B337E;
+    --periwinkle: #6667AB;
+    --blush: #F5D5E0;
+    --lime: #AADD44;
+    --white: #FAFAF8;
+    --text: #1a1a2e;
+    --muted: #5a5a7a;
+    --green-light: #f0fff4;
+    --green-border: #c8e6c9;
+    --green-text: #1b5e20;
+    --green-sub: #388e3c;
+  }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--white);
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 17px;
+    font-weight: 300;
+  }
+  .course-bar {
+    background: var(--purple-deep);
+    padding: 12px 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 13px; position: sticky; top: 0; z-index: 100;
+  }
+  .brand { font-weight: 500; color: var(--lime); letter-spacing: 0.08em; font-size: 12px; text-transform: uppercase; }
+  .lesson-tag { background: rgba(255,255,255,0.1); color: var(--blush); padding: 4px 14px; border-radius: 20px; font-size: 12px; }
+  .progress-bar { height: 3px; background: var(--purple-rich); position: sticky; top: 41px; z-index: 99; }
+  .progress-fill { height: 100%; width: 0%; background: var(--lime); transition: width 0.1s; }
+
+  .hero {
+    background: var(--purple-deep);
+    padding: 80px 40px 60px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before { content: ''; position: absolute; top: -60px; right: -60px; width: 300px; height: 300px; border-radius: 50%; background: var(--purple-rich); opacity: 0.4; }
+  .hero::after { content: ''; position: absolute; bottom: -80px; left: 20%; width: 200px; height: 200px; border-radius: 50%; background: var(--purple-mid); opacity: 0.2; }
+  .hero-inner { max-width: 720px; margin: 0 auto; position: relative; z-index: 1; }
+  .module-label { font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--periwinkle); margin-bottom: 16px; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 52px); color: var(--white); line-height: 1.15; margin-bottom: 20px; font-weight: 700; }
+  .hero h1 em { font-style: italic; color: var(--blush); }
+  .hero-sub { font-size: 16px; color: var(--blush); opacity: 0.8; font-weight: 300; max-width: 500px; line-height: 1.6; }
+  .read-time { display: inline-flex; align-items: center; gap: 6px; margin-top: 24px; font-size: 13px; color: var(--periwinkle); background: rgba(102,103,171,0.15); padding: 6px 14px; border-radius: 20px; }
+
+  .content { max-width: 680px; margin: 0 auto; padding: 60px 40px 80px; }
+  .content p { margin-bottom: 1.5rem; color: var(--text); font-weight: 300; }
+  .content p strong { font-weight: 500; color: var(--purple-deep); }
+  .content p em { color: var(--purple-mid); font-style: normal; font-weight: 400; }
+
+  .section-heading { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--purple-deep); margin: 3rem 0 1.5rem; font-weight: 700; }
+  .section-sub { font-size: 15px; color: var(--muted); margin-bottom: 1.5rem; font-weight: 300; line-height: 1.7; }
+  .divider { border: none; border-top: 1px solid var(--blush); margin: 3rem 0; }
+
+  .pull-quote {
+    background: var(--purple-deep); color: var(--white);
+    border-radius: 16px; padding: 40px 44px; margin: 3rem 0;
+    position: relative; overflow: hidden;
+  }
+  .pull-quote::before { content: '\201C'; font-family: 'Playfair Display', serif; font-size: 120px; color: var(--purple-rich); position: absolute; top: -10px; left: 20px; line-height: 1; }
+  .pull-quote p { font-family: 'Playfair Display', serif; font-size: clamp(18px, 3vw, 24px); line-height: 1.5; color: var(--blush); position: relative; z-index: 1; margin: 0; font-style: italic; }
+
+  /* WARNING */
+  .warning-box { background: #fff8f0; border: 1px solid #ffcc99; border-radius: 14px; padding: 24px 28px; margin: 2rem 0; }
+  .warning-label { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: #cc6600; margin-bottom: 10px; }
+  .warning-box p { color: var(--text); font-weight: 300; margin: 0; font-size: 15px; line-height: 1.75; }
+  .warning-box p strong { color: #cc6600; font-weight: 500; }
+
+  /* TIP CARDS */
+  .tip-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 2rem 0; }
+  .tip-card { background: #fafaf8; border: 0.5px solid #e0ddd8; border-radius: 14px; padding: 22px; }
+  .tip-emoji { font-size: 32px; margin-bottom: 12px; display: block; }
+  .tip-title { font-size: 15px; font-weight: 500; color: var(--purple-deep); margin-bottom: 8px; }
+  .tip-body { font-size: 14px; color: var(--muted); line-height: 1.65; font-weight: 300; }
+  .tip-body strong { color: var(--text); font-weight: 500; }
+
+  /* EXERCISE ROUTINE */
+  .routine { display: flex; flex-direction: column; gap: 0; margin: 2rem 0; border: 0.5px solid #e0ddd8; border-radius: 16px; overflow: hidden; }
+  .routine-item { display: flex; align-items: flex-start; gap: 16px; padding: 18px 22px; border-bottom: 0.5px solid #e0ddd8; background: var(--white); }
+  .routine-item:last-child { border-bottom: none; }
+  .routine-item:nth-child(even) { background: #fafaf8; }
+  .routine-time { min-width: 70px; font-size: 12px; font-weight: 500; color: var(--lime); background: var(--purple-deep); padding: 4px 10px; border-radius: 20px; text-align: center; flex-shrink: 0; margin-top: 2px; }
+  .routine-body { flex: 1; }
+  .routine-title { font-size: 15px; font-weight: 500; color: var(--purple-deep); margin-bottom: 4px; }
+  .routine-desc { font-size: 13px; color: var(--muted); line-height: 1.6; font-weight: 300; }
+
+  /* FOOD GRID */
+  .food-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin: 2rem 0; }
+  .food-item { background: var(--green-light); border: 1px solid var(--green-border); border-radius: 14px; padding: 20px 16px; text-align: center; }
+  .food-emoji { font-size: 32px; margin-bottom: 10px; display: block; }
+  .food-name { font-size: 14px; font-weight: 500; color: var(--green-text); margin-bottom: 6px; }
+  .food-why { font-size: 12px; color: var(--green-sub); font-weight: 300; line-height: 1.55; }
+
+  /* AVOID LIST */
+  .avoid-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 2rem 0; }
+  .avoid-item { background: #fff5f5; border: 1px solid #ffcdd2; border-radius: 12px; padding: 16px; }
+  .avoid-item .av-name { font-size: 14px; font-weight: 500; color: #b71c1c; margin-bottom: 4px; }
+  .avoid-item .av-why { font-size: 12px; color: #c62828; font-weight: 300; line-height: 1.55; }
+
+  /* HIGHLIGHT */
+  .highlight-box { background: var(--blush); border-radius: 12px; padding: 28px 32px; margin: 2.5rem 0; }
+  .highlight-box p { color: var(--purple-deep); font-weight: 400; margin: 0; font-size: 15px; line-height: 1.75; }
+  .highlight-box p strong { font-weight: 500; }
+
+  /* SETUP CHECKLIST */
+  .setup-list { display: flex; flex-direction: column; gap: 0; margin: 2rem 0; border: 0.5px solid #e0ddd8; border-radius: 16px; overflow: hidden; }
+  .setup-item { display: flex; align-items: flex-start; gap: 14px; padding: 16px 20px; border-bottom: 0.5px solid #e0ddd8; background: var(--white); }
+  .setup-item:last-child { border-bottom: none; }
+  .setup-item:nth-child(even) { background: #fafaf8; }
+  .setup-dot { min-width: 10px; height: 10px; border-radius: 50%; background: var(--lime); margin-top: 7px; flex-shrink: 0; }
+  .setup-body { flex: 1; font-size: 14px; color: var(--text); line-height: 1.65; font-weight: 300; }
+  .setup-body strong { font-weight: 500; color: var(--purple-deep); }
+
+  /* CALLOUT */
+  .callout { background: #f5f5f0; border-radius: 16px; padding: 28px 32px; margin: 3rem 0; border: 0.5px solid #e0ddd8; }
+  .callout p { font-size: 15px; color: var(--muted); margin: 0; line-height: 1.75; }
+  .callout p em { color: var(--purple-deep); font-style: normal; font-weight: 500; }
+
+  /* NAV */
+  .nav-footer { background: var(--purple-deep); padding: 40px; display: flex; align-items: center; justify-content: space-between; }
+  .nav-footer .prev { font-size: 14px; color: var(--blush); opacity: 0.6; text-decoration: none; }
+  .next-btn { background: var(--lime); color: var(--purple-deep); border: none; padding: 14px 32px; border-radius: 30px; font-size: 15px; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: transform 0.2s; }
+  .next-btn:hover { transform: translateY(-2px); }
+  .mascot { position: fixed; bottom: 24px; right: 24px; font-size: 32px; cursor: pointer; transition: transform 0.3s; z-index: 200; }
+  .mascot:hover { transform: scale(1.1) rotate(-5deg); }
+
+  @media (max-width: 600px) {
+    .hero { padding: 60px 24px 40px; }
+    .content { padding: 40px 24px 60px; }
+    .pull-quote { padding: 28px 24px; }
+    .nav-footer { padding: 24px; flex-direction: column; align-items: flex-start; gap: 16px; }
+    .course-bar { padding: 12px 20px; }
+    .tip-grid { grid-template-columns: 1fr; }
+    .food-grid { grid-template-columns: 1fr 1fr; }
+    .avoid-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="course-bar">
+  <span class="brand">Toll Bridge Education</span>
+  <span class="lesson-tag">Managing Me · Lesson 1 — Your Body</span>
+</div>
+<div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="module-label">Managing Me · Lesson 1 — Reading Material</div>
+    <h1>Your body is your<br><em>classroom.</em></h1>
+    <p class="hero-sub">You cannot show up for your students if you are not showing up for yourself first. This lesson is about keeping your physical self well enough to do this job for the long term.</p>
+    <div class="read-time">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      10 min read
+    </div>
+  </div>
+</div>
+
+<div class="content">
+
+  <p>Remote teaching is deceptively physical. You sit for hours. You talk constantly. Your eyes are fixed on a screen. Your back is under sustained pressure. Your wrists, your neck, your shoulders — all holding positions they were not designed to hold for that long.</p>
+
+  <p>And because you are at home, there is no natural movement built into your day. No commute. No walking between classrooms. No standing in front of a real class. Just you, your chair, and your screen — for as many hours as you decide to teach.</p>
+
+  <p>That is a recipe for slow physical decline if you are not intentional about it. <strong>This lesson gives you the tools to be intentional.</strong></p>
+
+  <div class="pull-quote">
+    <p>Your body is the instrument you teach with. If you neglect it, your performance suffers — and so do your students.</p>
+  </div>
+
+  <h2 class="section-heading">What remote teaching does to your body</h2>
+
+  <p class="section-sub">Before we talk about solutions, let's be honest about the problem. These are the physical realities of remote teaching that nobody warns you about:</p>
+
+  <div class="warning-box">
+    <div class="warning-label">⚠️ The silent costs of sitting all day</div>
+    <p>
+      <strong>Lower back pain</strong> — sustained sitting compresses your lumbar spine. Without core engagement or regular movement, this becomes chronic fast.<br><br>
+      <strong>Eye strain and headaches</strong> — staring at a screen for eight-plus hours causes digital eye strain, blurred vision, and tension headaches that can derail your teaching energy.<br><br>
+      <strong>Weight gain</strong> — not from eating badly, but from simply not moving. Your metabolism slows significantly when you are sedentary for most of the day.<br><br>
+      <strong>Poor posture</strong> — hunched shoulders, forward head position, and a caved chest develop gradually and cause long-term neck and upper back problems.<br><br>
+      <strong>Mental fatigue from physical stagnation</strong> — your brain needs blood flow. When your body is still, your thinking becomes sluggish, your mood dips, and your patience shortens.
+    </p>
+  </div>
+
+  <hr class="divider">
+
+  <h2 class="section-heading">Movement — the non-negotiable</h2>
+
+  <p class="section-sub">You do not need a gym membership or a personal trainer. You need intentional, consistent movement built into your teaching day. Here is how to do it without disrupting your schedule.</p>
+
+  <div class="tip-grid">
+    <div class="tip-card">
+      <span class="tip-emoji">🚶</span>
+      <div class="tip-title">Walk every single day — outside</div>
+      <div class="tip-body">Thirty minutes minimum. Not a treadmill — outside, in natural light. Walking outdoors lowers cortisol, boosts serotonin, clears your mind, and gives your eyes a break from screens. <strong>This is the single most powerful habit for remote workers.</strong> Do it before your first class or between your morning and afternoon sessions.</div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-emoji">🧘</span>
+      <div class="tip-title">Stretch between every class</div>
+      <div class="tip-body">Five minutes between sessions is enough. Neck rolls, shoulder circles, a standing forward fold, a hip flexor stretch. Set a timer on your phone. Make it automatic. <strong>Over six months, this is the difference between a healthy back and a painful one.</strong></div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-emoji">⏱️</span>
+      <div class="tip-title">Stand up every 30 minutes</div>
+      <div class="tip-body">Use a timer. Every thirty minutes — even if just for sixty seconds — stand up, move your legs, shift your weight. This alone significantly reduces the cardiovascular risk associated with prolonged sitting.</div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-emoji">💪</span>
+      <div class="tip-title">Strength training twice a week</div>
+      <div class="tip-body">Bodyweight exercises — squats, lunges, push-ups, planks — done twice a week builds the core and back strength that keeps you pain-free in the chair. You do not need equipment. You need twenty minutes and a floor.</div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-emoji">🏃</span>
+      <div class="tip-title">Use breaks for movement, not screens</div>
+      <div class="tip-body">When you finish a class, the temptation is to check your phone or scroll. Resist it. Your break is movement, not more screen time. Walk to the kitchen. Do ten jumping jacks. Shake out your hands. Your next class will thank you.</div>
+    </div>
+    <div class="tip-card">
+      <span class="tip-emoji">🌙</span>
+      <div class="tip-title">Protect your sleep above everything</div>
+      <div class="tip-body">Many ESL teachers work late into the night for Beijing time zones. Chronic sleep deprivation destroys your immune system, your mood, your patience, and your cognitive function. <strong>Eight hours is not a luxury. It is the job.</strong> Protect it fiercely.</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <h2 class="section-heading">A simple movement routine for teaching days</h2>
+
+  <p class="section-sub">Here is a practical daily structure that fits around a full teaching schedule without adding pressure:</p>
+
+  <div class="routine">
+    <div class="routine-item">
+      <div class="routine-time">Morning</div>
+      <div class="routine-body">
+        <div class="routine-title">Before your first class — 10 to 15 minutes</div>
+        <div class="routine-desc">Light stretching or yoga. Focus on your spine, hips, and shoulders. This wakes your body up and prepares you mentally for the day. Do not skip this because you feel fine — do it to stay fine.</div>
+      </div>
+    </div>
+    <div class="routine-item">
+      <div class="routine-time">Midday</div>
+      <div class="routine-body">
+        <div class="routine-title">Between sessions — 30 minute walk</div>
+        <div class="routine-desc">This is your reset. Step outside, leave your phone in your pocket, and just walk. No podcasts. No music if possible. Let your mind decompress. Return refreshed for the afternoon.</div>
+      </div>
+    </div>
+    <div class="routine-item">
+      <div class="routine-time">Between</div>
+      <div class="routine-body">
+        <div class="routine-title">Between every class — 5 minute stretch</div>
+        <div class="routine-desc">Neck, shoulders, lower back, hip flexors. Use a YouTube stretch video if you need guidance. Set it as a phone alarm so you never skip it because you forgot.</div>
+      </div>
+    </div>
+    <div class="routine-item">
+      <div class="routine-time">Evening</div>
+      <div class="routine-body">
+        <div class="routine-title">After your last class — 20 minutes strength or cardio</div>
+        <div class="routine-desc">Bodyweight circuit, a run, a dance class, whatever you enjoy. This marks the end of your work day physically — transitioning your body out of teaching mode and into recovery mode.</div>
+      </div>
+    </div>
+    <div class="routine-item">
+      <div class="routine-time">Night</div>
+      <div class="routine-body">
+        <div class="routine-title">Before bed — no screens, wind down</div>
+        <div class="routine-desc">Screen light suppresses melatonin and delays sleep. Thirty minutes before bed: dim the lights, put the phone down, read a book or do gentle breathing. Your sleep quality will improve within a week.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <h2 class="section-heading">Your workspace setup — the foundation of physical health</h2>
+
+  <p class="section-sub">Your environment shapes your body whether you realise it or not. A poor setup causes pain. A good setup prevents it.</p>
+
+  <div class="setup-list">
+    <div class="setup-item">
+      <div class="setup-dot"></div>
+      <div class="setup-body"><strong>Chair height:</strong> Your feet should be flat on the floor. Your knees at ninety degrees. Your hips slightly higher than your knees. If your chair does not allow this, use a firm cushion or footrest.</div>
+    </div>
+    <div class="setup-item">
+      <div class="setup-dot"></div>
+      <div class="setup-body"><strong>Screen position:</strong> Your monitor or laptop screen should be at eye level — not tilted down. Looking down at a screen for hours causes neck pain. Use a laptop stand or stack of books if needed.</div>
+    </div>
+    <div class="setup-item">
+      <div class="setup-dot"></div>
+      <div class="setup-body"><strong>Lumbar support:</strong> Your lower back should be supported — not hanging in mid-air. A good ergonomic chair handles this. If yours does not, a rolled towel or lumbar cushion placed at the small of your back works.</div>
+    </div>
+    <div class="setup-item">
+      <div class="setup-dot"></div>
+      <div class="setup-body"><strong>Keyboard and mouse position:</strong> Your elbows should be at ninety degrees with your wrists straight when typing. Wrist strain from poor positioning causes repetitive strain injury over time — a career-limiting condition for a teacher.</div>
+    </div>
+    <div class="setup-item">
+      <div class="setup-dot"></div>
+      <div class="setup-body"><strong>The 20-20-20 rule for your eyes:</strong> Every 20 minutes, look at something 20 feet away for 20 seconds. Set a reminder on your phone. Digital eye strain causes headaches, blurred vision, and fatigue — all of which directly affect your teaching quality.</div>
+    </div>
+    <div class="setup-item">
+      <div class="setup-dot"></div>
+      <div class="setup-body"><strong>Lighting:</strong> Natural light in front of you is ideal — both for your eyes and for how you appear on camera. Avoid having bright light behind you. If natural light is limited, a ring light placed in front solves both problems at once.</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <h2 class="section-heading">Eating for energy and focus</h2>
+
+  <p class="section-sub">What you eat directly affects your mood, your patience, your memory, and your ability to stay present in class. Teaching on the wrong fuel is like driving a car on the wrong petrol — it runs, but not well.</p>
+
+  <div class="food-grid">
+    <div class="food-item">
+      <span class="food-emoji">🐟</span>
+      <div class="food-name">Fatty fish</div>
+      <div class="food-why">Omega-3s directly support brain function, memory, and mood regulation. Eat salmon, mackerel, or sardines at least twice a week.</div>
+    </div>
+    <div class="food-item">
+      <span class="food-emoji">🥑</span>
+      <div class="food-name">Avocado</div>
+      <div class="food-why">Healthy monounsaturated fats provide sustained energy without the sugar crash. Great before a long teaching block.</div>
+    </div>
+    <div class="food-item">
+      <span class="food-emoji">🫐</span>
+      <div class="food-name">Blueberries</div>
+      <div class="food-why">Packed with antioxidants that protect the brain, reduce inflammation, and improve concentration and memory.</div>
+    </div>
+    <div class="food-item">
+      <span class="food-emoji">🥚</span>
+      <div class="food-name">Eggs</div>
+      <div class="food-why">High in choline — a nutrient directly linked to cognitive performance and mental clarity. A great pre-class breakfast.</div>
+    </div>
+    <div class="food-item">
+      <span class="food-emoji">🌰</span>
+      <div class="food-name">Nuts and seeds</div>
+      <div class="food-why">Perfect between-class snacks. Healthy fats, protein, and slow-release energy without the spike and crash of sugary snacks.</div>
+    </div>
+    <div class="food-item">
+      <span class="food-emoji">🍫</span>
+      <div class="food-name">Dark chocolate</div>
+      <div class="food-why">70% or higher. Boosts mood, focus, and blood flow to the brain. A small piece between classes is genuinely beneficial.</div>
+    </div>
+    <div class="food-item">
+      <span class="food-emoji">🥦</span>
+      <div class="food-name">Leafy greens</div>
+      <div class="food-why">Spinach, broccoli, kale — rich in vitamins K, B, and folate, all linked to sharper thinking and slower cognitive decline.</div>
+    </div>
+    <div class="food-item">
+      <span class="food-emoji">🍌</span>
+      <div class="food-name">Bananas</div>
+      <div class="food-why">Natural sugar for quick energy plus tryptophan which the brain converts to serotonin — the mood-boosting chemical.</div>
+    </div>
+    <div class="food-item">
+      <span class="food-emoji">💧</span>
+      <div class="food-name">Water — always</div>
+      <div class="food-why">Even mild dehydration causes fatigue, headaches, and reduced concentration. Keep water on your desk. Drink before you feel thirsty.</div>
+    </div>
+  </div>
+
+  <p>And what to avoid — or significantly reduce:</p>
+
+  <div class="avoid-grid">
+    <div class="avoid-item">
+      <div class="av-name">❌ Excessive caffeine</div>
+      <div class="av-why">More than two to three cups creates anxiety, disrupts sleep, and causes energy crashes that make you irritable in class.</div>
+    </div>
+    <div class="avoid-item">
+      <div class="av-name">❌ Heavy meals before class</div>
+      <div class="av-why">A big meal triggers a blood sugar spike followed by a crash — leaving you sluggish and foggy mid-lesson. Eat light before you teach.</div>
+    </div>
+    <div class="avoid-item">
+      <div class="av-name">❌ Sugary snacks</div>
+      <div class="av-why">The spike feels good for twenty minutes. The crash that follows makes you irritable, unfocused, and tired — exactly when you need to be at your best.</div>
+    </div>
+    <div class="avoid-item">
+      <div class="av-name">❌ Skipping meals</div>
+      <div class="av-why">Low blood sugar makes you short-tempered and mentally slow. You cannot manage a difficult student when your own brain is running on empty.</div>
+    </div>
+  </div>
+
+  <div class="highlight-box">
+    <p><strong>The simple rule:</strong> eat something light, nourishing, and protein-rich thirty to forty-five minutes before your first class. Keep water on your desk. Snack on nuts or fruit between sessions. Save your largest meal for after your teaching block ends.</p>
+  </div>
+
+  <div class="callout">
+    <p>Your assignment this week: <em>Pick one habit from this lesson that you do not currently do — and do it every day for seven days.</em> Just one. Movement, food, workspace, or sleep. Small and consistent beats ambitious and abandoned every time.</p>
+  </div>
+
+</div>
+
+<div class="nav-footer">
+  <a href="#" class="prev">← Back to Lesson Overview</a>
+  <button class="next-btn">Continue to Lesson 2 →</button>
+</div>
+
+<div class="mascot">🦎</div>
+
+<script>
+  window.addEventListener('scroll', () => {
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const scrollHeight = doc.scrollHeight - doc.clientHeight;
+    const progress = (scrollTop / scrollHeight) * 100;
+    document.getElementById('progress').style.width = progress + '%';
+  });
+</script>
+</body>
+</html>

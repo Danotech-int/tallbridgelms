@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Congratulations — Tall Bridge Education</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --purple-deep: #210635;
+    --purple-rich: #420D4B;
+    --purple-mid: #7B337E;
+    --periwinkle: #6667AB;
+    --blush: #F5D5E0;
+    --lime: #AADD44;
+    --white: #FAFAF8;
+    --text: #1a1a2e;
+    --muted: #5a5a7a;
+  }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--purple-deep);
+    color: var(--white);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+  }
+
+  /* CONFETTI CANVAS */
+  #confetti-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .course-bar {
+    background: rgba(0,0,0,0.3);
+    padding: 12px 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 13px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    position: relative; z-index: 10;
+  }
+  .brand { font-weight: 500; color: var(--lime); letter-spacing: 0.08em; font-size: 12px; text-transform: uppercase; }
+  .tag { background: rgba(255,255,255,0.1); color: var(--blush); padding: 4px 14px; border-radius: 20px; font-size: 12px; }
+
+  .hero-section {
+    flex: 0;
+    padding: 70px 40px 50px;
+    text-align: center;
+    position: relative; z-index: 10;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    background: var(--lime);
+    font-size: 48px;
+    margin-bottom: 28px;
+    animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    box-shadow: 0 0 0 0 rgba(170,221,68,0.4);
+    animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) both,
+               pulse 2s ease-in-out 0.6s infinite;
+  }
+
+  @keyframes popIn {
+    from { opacity: 0; transform: scale(0.5); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(170,221,68,0.4); }
+    50% { box-shadow: 0 0 0 20px rgba(170,221,68,0); }
+  }
+
+  .hero-label {
+    font-size: 11px; font-weight: 500; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--lime);
+    margin-bottom: 14px;
+    animation: fadeUp 0.5s ease 0.2s both;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 6vw, 62px);
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 20px;
+    animation: fadeUp 0.5s ease 0.3s both;
+  }
+  .hero-title em { color: var(--blush); font-style: italic; }
+
+  .hero-sub {
+    font-size: 17px;
+    color: rgba(255,255,255,0.65);
+    font-weight: 300;
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.7;
+    animation: fadeUp 0.5s ease 0.4s both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* STATS ROW */
+  .stats-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    padding: 32px 40px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    position: relative; z-index: 10;
+    animation: fadeUp 0.5s ease 0.5s both;
+  }
+  .stat { text-align: center; }
+  .stat-num { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; color: var(--lime); }
+  .stat-label { font-size: 12px; color: rgba(255,255,255,0.45); font-weight: 300; margin-top: 4px; letter-spacing: 0.04em; }
+  .stat-divider { width: 1px; height: 40px; background: rgba(255,255,255,0.12); }
+
+  /* BOOKING SECTION */
+  .booking-section {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 50px 40px 60px;
+    position: relative; z-index: 10;
+    animation: fadeUp 0.5s ease 0.6s both;
+  }
+
+  .booking-header { text-align: center; margin-bottom: 32px; }
+  .booking-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(24px, 3.5vw, 36px);
+    color: var(--white);
+    margin-bottom: 12px;
+    font-weight: 700;
+  }
+  .booking-header h2 em { color: var(--blush); font-style: italic; }
+  .booking-header p {
+    font-size: 15px;
+    color: rgba(255,255,255,0.6);
+    font-weight: 300;
+    line-height: 1.7;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  /* WHAT TO EXPECT */
+  .expect-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 36px;
+  }
+  .expect-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 14px;
+    padding: 20px;
+  }
+  .expect-num {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--lime);
+    color: var(--purple-deep);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 500;
+    margin-bottom: 10px;
+  }
+  .expect-title { font-size: 14px; font-weight: 500; color: var(--white); margin-bottom: 5px; }
+  .expect-desc { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.6; font-weight: 300; }
+
+  /* CALENDLY EMBED */
+  .calendly-wrap {
+    background: var(--white);
+    border-radius: 20px;
+    overflow: hidden;
+    min-height: 650px;
+    position: relative;
+  }
+
+  .calendly-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 500px;
+    padding: 40px;
+    text-align: center;
+    background: var(--white);
+    border-radius: 20px;
+  }
+  .calendly-placeholder .cal-icon { font-size: 48px; margin-bottom: 16px; }
+  .calendly-placeholder h3 { font-size: 20px; font-weight: 500; color: var(--text); margin-bottom: 10px; font-family: 'Playfair Display', serif; }
+  .calendly-placeholder p { font-size: 14px; color: var(--muted); line-height: 1.7; max-width: 380px; margin: 0 auto 24px; font-weight: 300; }
+  .calendly-placeholder .setup-note { font-size: 12px; color: var(--muted); font-style: italic; opacity: 0.7; }
+
+  .cal-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--purple-deep);
+    color: var(--white);
+    padding: 14px 28px;
+    border-radius: 30px;
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    font-family: 'DM Sans', sans-serif;
+    transition: opacity 0.2s;
+    margin-bottom: 16px;
+  }
+  .cal-btn:hover { opacity: 0.85; }
+
+  /* NOTE BOX */
+  .note-box {
+    background: rgba(170,221,68,0.08);
+    border: 1px solid rgba(170,221,68,0.2);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-top: 24px;
+  }
+  .note-label { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lime); margin-bottom: 7px; }
+  .note-box p { font-size: 13px; color: rgba(255,255,255,0.75); line-height: 1.65; font-weight: 300; margin: 0; }
+  .note-box p strong { color: var(--white); font-weight: 500; }
+
+  /* CLOSING */
+  .closing {
+    text-align: center;
+    padding: 40px;
+    position: relative; z-index: 10;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  .closing p { font-size: 15px; color: rgba(255,255,255,0.5); font-weight: 300; line-height: 1.7; max-width: 500px; margin: 0 auto 20px; }
+  .closing p strong { color: var(--white); font-weight: 500; }
+
+  .mascot-closing { font-size: 40px; display: block; margin: 0 auto 12px; animation: bounce 2s ease-in-out infinite; }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  @media (max-width: 600px) {
+    .hero-section { padding: 50px 24px 40px; }
+    .stats-row { gap: 24px; padding: 24px 20px; flex-wrap: wrap; }
+    .booking-section { padding: 40px 24px 50px; }
+    .expect-cards { grid-template-columns: 1fr; }
+    .course-bar { padding: 10px 20px; }
+    .closing { padding: 30px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="confetti-canvas"></canvas>
+
+<div class="course-bar">
+  <span class="brand">Tall Bridge Education</span>
+  <span class="tag">Module Complete 🎉</span>
+</div>
+
+<div class="hero-section">
+  <div class="badge">🎓</div>
+  <div class="hero-label">You did it</div>
+  <h1 class="hero-title">Congratulations,<br><em>teacher.</em></h1>
+  <p class="hero-sub">You have completed the Tall Bridge Education course. Every module. Every lesson. Every reflection. You showed up — and that is everything. Now it is time for the most exciting part.</p>
+</div>
+
+<div class="stats-row">
+  <div class="stat">
+    <div class="stat-num">6</div>
+    <div class="stat-label">Modules completed</div>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat">
+    <div class="stat-num">2</div>
+    <div class="stat-label">Live practice sessions ahead</div>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat">
+    <div class="stat-num">∞</div>
+    <div class="stat-label">Classes you are ready for</div>
+  </div>
+</div>
+
+<div class="booking-section">
+
+  <div class="booking-header">
+    <h2>Book your live<br><em>practice sessions.</em></h2>
+    <p>You have two live sessions with your instructor. This is where everything you have learned becomes real. Choose your dates below and show up ready to teach.</p>
+  </div>
+
+  <div class="expect-cards">
+    <div class="expect-card">
+      <div class="expect-num">1</div>
+      <div class="expect-title">Practice Session One</div>
+      <div class="expect-desc">Tool practice on ClassIn, Zoom, or VoovMeeting. You will set up, navigate, and run a mock class with your instructor watching.</div>
+    </div>
+    <div class="expect-card">
+      <div class="expect-num">2</div>
+      <div class="expect-title">Practice Session Two</div>
+      <div class="expect-desc">Your demo class. You teach a ten-minute lesson to the group. You receive feedback, scoring, and coaching from your instructor.</div>
+    </div>
+    <div class="expect-card">
+      <div class="expect-num">📋</div>
+      <div class="expect-title">Come prepared</div>
+      <div class="expect-desc">Have ClassIn installed and your free account set up. Have a lesson topic in mind. Bring your energy — this is your first real classroom.</div>
+    </div>
+    <div class="expect-card">
+      <div class="expect-num">⏱️</div>
+      <div class="expect-title">Each session is 2 hours</div>
+      <div class="expect-desc">Sessions are group format. Everyone teaches, everyone observes, everyone receives feedback. Maximum group size is your cohort.</div>
+    </div>
+  </div>
+
+  <!-- CALENDLY EMBED — replace YOUR_CALENDLY_LINK with your actual Calendly URL -->
+  <div class="calendly-wrap" id="calendly-container">
+    <div class="calendly-placeholder" id="cal-placeholder">
+      <span class="cal-icon">📅</span>
+      <h3>Pick your session dates</h3>
+      <p>Choose two available dates from the calendar below. You will receive a confirmation and reminder email after booking.</p>
+      <a href="YOUR_CALENDLY_LINK_HERE" target="_blank" class="cal-btn">
+        📅 &nbsp; Open Booking Calendar
+      </a>
+      <p class="setup-note">Calendar powered by Calendly · Replace the link above with your Tall Bridge Education Calendly URL</p>
+    </div>
+  </div>
+
+  <!-- TO EMBED CALENDLY INLINE, uncomment and replace the link below: -->
+  <!--
+  <div class="calendly-wrap">
+    <iframe
+      src="https://calendly.com/YOUR_CALENDLY_USERNAME/practice-session"
+      width="100%"
+      height="650"
+      frameborder="0"
+      style="border: none; border-radius: 20px;"
+    ></iframe>
+  </div>
+  -->
+
+  <div class="note-box">
+    <div class="note-label">📌 Important — Read before booking</div>
+    <p>You are booking <strong>two sessions total</strong> — not two on the same day. Book Session One first, attend it, then book Session Two. Each session builds on the previous one. If you need to reschedule, please do so at least 24 hours in advance through the booking link.</p>
+  </div>
+
+</div>
+
+<div class="closing">
+  <span class="mascot-closing">🦎</span>
+  <p><strong>Liz is proud of you.</strong> You came in knowing how to speak English. You are leaving knowing how to teach it. That is not a small thing. That is a career. Go get it.</p>
+  <p>See you in the live sessions. Come ready.</p>
+  <img src="mrbean.jpeg" alt="Mr Bean thumbs up" style="width: 180px; border-radius: 16px; margin-top: 28px; box-shadow: 0 8px 32px rgba(0,0,0,0.4);">
+  <p style="margin-top: 14px; font-size: 13px; color: rgba(255,255,255,0.35); font-style: italic;">We see you. 👍</p>
+</div>
+
+<script>
+  // CONFETTI ANIMATION
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const colors = ['#AADD44', '#F5D5E0', '#6667AB', '#420D4B', '#ffffff'];
+  const pieces = [];
+
+  for (let i = 0; i < 120; i++) {
+    pieces.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height - canvas.height,
+      w: Math.random() * 10 + 4,
+      h: Math.random() * 6 + 3,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      speed: Math.random() * 3 + 1,
+      angle: Math.random() * Math.PI * 2,
+      spin: (Math.random() - 0.5) * 0.15,
+      drift: (Math.random() - 0.5) * 1.5,
+      opacity: Math.random() * 0.8 + 0.2
+    });
+  }
+
+  let frame = 0;
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (frame < 300) {
+      pieces.forEach(p => {
+        p.y += p.speed;
+        p.x += p.drift;
+        p.angle += p.spin;
+        if (p.y > canvas.height) {
+          p.y = -20;
+          p.x = Math.random() * canvas.width;
+        }
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.angle);
+        ctx.globalAlpha = p.opacity;
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+        ctx.restore();
+      });
+    }
+    frame++;
+    if (frame < 400) requestAnimationFrame(animate);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 2 — The Nigerian Teacher Narrative | Toll Bridge Education</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --purple-deep: #210635;
+    --purple-rich: #420D4B;
+    --purple-mid: #7B337E;
+    --periwinkle: #6667AB;
+    --blush: #F5D5E0;
+    --lime: #AADD44;
+    --white: #FAFAF8;
+    --text: #1a1a2e;
+    --text-muted: #5a5a7a;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--white);
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 17px;
+    font-weight: 300;
+  }
+
+  .course-bar {
+    background: var(--purple-deep);
+    color: var(--blush);
+    padding: 12px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .course-bar .brand {
+    font-weight: 500;
+    color: var(--lime);
+    letter-spacing: 0.08em;
+    font-size: 12px;
+    text-transform: uppercase;
+  }
+
+  .course-bar .lesson-tag {
+    background: var(--purple-rich);
+    color: var(--blush);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+  }
+
+  .progress-bar {
+    height: 3px;
+    background: var(--purple-rich);
+    position: sticky;
+    top: 41px;
+    z-index: 99;
+  }
+
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--lime);
+    transition: width 0.1s;
+  }
+
+  .hero {
+    background: var(--purple-deep);
+    padding: 80px 40px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px;
+    right: -60px;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: var(--purple-rich);
+    opacity: 0.4;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -80px;
+    left: 20%;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: var(--purple-mid);
+    opacity: 0.2;
+  }
+
+  .hero-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .module-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--periwinkle);
+    margin-bottom: 16px;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 5vw, 52px);
+    color: var(--white);
+    line-height: 1.15;
+    margin-bottom: 20px;
+    font-weight: 700;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--blush);
+  }
+
+  .hero-sub {
+    font-size: 16px;
+    color: var(--blush);
+    opacity: 0.8;
+    font-weight: 300;
+    max-width: 500px;
+    line-height: 1.6;
+  }
+
+  .read-time {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 24px;
+    font-size: 13px;
+    color: var(--periwinkle);
+    background: rgba(102, 103, 171, 0.15);
+    padding: 6px 14px;
+    border-radius: 20px;
+  }
+
+  .content {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 60px 40px 80px;
+  }
+
+  .content p {
+    margin-bottom: 1.5rem;
+    color: var(--text);
+    font-weight: 300;
+  }
+
+  .content p.bold-line {
+    font-weight: 500;
+    font-size: 18px;
+    color: var(--purple-deep);
+  }
+
+  .stanza {
+    margin: 2rem 0;
+    padding-left: 24px;
+    border-left: 2px solid var(--blush);
+  }
+
+  .stanza p {
+    margin-bottom: 0.4rem;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  .pull-quote {
+    background: var(--purple-deep);
+    color: var(--white);
+    border-radius: 16px;
+    padding: 40px 44px;
+    margin: 3rem 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pull-quote::before {
+    content: '\201C';
+    font-family: 'Playfair Display', serif;
+    font-size: 120px;
+    color: var(--purple-rich);
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    line-height: 1;
+  }
+
+  .pull-quote p {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(18px, 3vw, 24px);
+    line-height: 1.5;
+    color: var(--blush);
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    font-style: italic;
+  }
+
+  .section-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    color: var(--purple-deep);
+    margin: 3rem 0 1.5rem;
+    font-weight: 700;
+  }
+
+  .highlight-box {
+    background: var(--blush);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin: 2.5rem 0;
+  }
+
+  .highlight-box p {
+    color: var(--purple-deep);
+    font-weight: 400;
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.75;
+  }
+
+  .highlight-box p strong {
+    font-weight: 500;
+  }
+
+  .opportunity-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin: 2rem 0;
+  }
+
+  .opp-card {
+    background: var(--purple-deep);
+    border-radius: 12px;
+    padding: 20px;
+    color: var(--white);
+  }
+
+  .opp-card .opp-icon {
+    font-size: 22px;
+    margin-bottom: 10px;
+  }
+
+  .opp-card p {
+    font-size: 14px;
+    color: var(--blush);
+    margin: 0;
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  .opp-card strong {
+    display: block;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--blush);
+    margin: 3rem 0;
+  }
+
+  .reflection-section {
+    background: linear-gradient(135deg, var(--purple-deep), var(--purple-rich));
+    border-radius: 20px;
+    padding: 48px 44px;
+    margin: 3rem 0;
+    color: var(--white);
+  }
+
+  .reflection-section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    color: var(--blush);
+    margin-bottom: 8px;
+  }
+
+  .reflection-section .sub {
+    font-size: 14px;
+    color: var(--periwinkle);
+    margin-bottom: 32px;
+    font-weight: 300;
+  }
+
+  .reflection-section .sub em { font-style: normal; }
+
+  .question {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+
+  .question .q-num {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: var(--lime);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .question p {
+    font-size: 16px;
+    color: var(--white);
+    margin: 0 0 8px;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+
+  .question .hint {
+    font-size: 13px;
+    color: var(--blush);
+    opacity: 0.7;
+    margin: 0;
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  .nav-footer {
+    background: var(--purple-deep);
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .nav-footer .prev {
+    font-size: 14px;
+    color: var(--blush);
+    opacity: 0.6;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .nav-footer .next-btn {
+    background: var(--lime);
+    color: var(--purple-deep);
+    border: none;
+    padding: 14px 32px;
+    border-radius: 30px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .nav-footer .next-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(170, 221, 68, 0.3);
+  }
+
+  .mascot {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 64px;
+    height: 64px;
+    background: var(--lime);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    transition: transform 0.3s;
+    z-index: 200;
+  }
+
+  .mascot:hover { transform: scale(1.1) rotate(-5deg); }
+
+  @media (max-width: 600px) {
+    .hero { padding: 60px 24px 40px; }
+    .content { padding: 40px 24px 60px; }
+    .pull-quote { padding: 28px 24px; }
+    .reflection-section { padding: 32px 24px; }
+    .nav-footer { padding: 24px; flex-direction: column; align-items: flex-start; }
+    .course-bar { padding: 12px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="course-bar">
+  <span class="brand">Toll Bridge Education</span>
+  <span class="lesson-tag">Module 1 · Lesson 2</span>
+</div>
+
+<div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="module-label">Module 1 — Meet Yourself · Reading Material</div>
+    <h1>The Nigerian Teacher <em>Narrative</em></h1>
+    <p class="hero-sub">Maybe the problem was never teaching. Maybe it was the system around it.</p>
+    <div class="read-time">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      8 min read
+    </div>
+  </div>
+</div>
+
+<div class="content">
+
+  <p>Growing up in Nigeria, many of us heard the same thing in different ways.</p>
+
+  <div class="stanza">
+    <p>"Read your books so you don't end up a teacher."</p>
+  </div>
+
+  <p>Sometimes it was said jokingly. Sometimes seriously. Sometimes with pity.</p>
+
+  <p>And slowly, without realizing it, we absorbed the message.</p>
+
+  <p>That teaching was the job people settled for when life did not go according to plan. Not the dream. Not the ambition. Not the future. Just survival.</p>
+
+  <p>We saw exhausted teachers in overcrowded classrooms. We saw people who worked hard but still struggled financially. We saw teachers trekking home after school because transport money was tight. We saw brilliant people become invisible because the system around them did not reward their brilliance.</p>
+
+  <p>And because of that, many of us confused two completely different things:</p>
+
+  <div class="stanza">
+    <p>The value of teaching…</p>
+    <p>and the failure of a broken system.</p>
+  </div>
+
+  <div class="pull-quote">
+    <p>They are not the same thing. A broken system can underpay a valuable skill. But that does not reduce the importance of the skill itself.</p>
+  </div>
+
+  <p class="bold-line">And teaching is important. Always has been.</p>
+
+  <p>Think about it. Every doctor was first taught by someone. Every engineer. Every lawyer. Every pilot. Every software developer. Every architect. Every successful person you admire today once sat somewhere, confused about something — until somebody explained it clearly enough for them to understand.</p>
+
+  <p>That moment matters more than we think.</p>
+
+  <div class="highlight-box">
+    <p><strong>One human helping another human move from confusion to clarity.</strong> That is teaching. The world changes because people understand things. And the people who help others understand things hold more power than they realize.</p>
+  </div>
+
+  <h2 class="section-heading">Something has changed.</h2>
+
+  <p>The internet changed access. Remote work changed geography. Global education changed opportunity.</p>
+
+  <p>For the first time in history, somebody sitting in Lagos, Ibadan, Port Harcourt, Enugu, Kaduna, or Abeokuta can teach a student thousands of kilometers away — and get paid for knowledge they already carry.</p>
+
+  <p>Not because they became somebody else overnight. But because the world became more connected.</p>
+
+  <div class="opportunity-grid">
+    <div class="opp-card">
+      <div class="opp-icon">💬</div>
+      <strong>Clarity</strong>
+      <p>Being able to simplify difficult ideas is a global skill worth paying for.</p>
+    </div>
+    <div class="opp-card">
+      <div class="opp-icon">🎯</div>
+      <strong>Patience</strong>
+      <p>Helping people learn at their pace is rare and deeply valuable.</p>
+    </div>
+    <div class="opp-card">
+      <div class="opp-icon">✨</div>
+      <strong>Presence</strong>
+      <p>Holding someone's attention while they learn — that is a superpower.</p>
+    </div>
+  </div>
+
+  <p>Many people still underestimate themselves. They think: "I'm just good at English." "I only know how to explain things." "I'm not an expert."</p>
+
+  <p>But the world pays for clarity. The world pays for patience. The world pays for communication.</p>
+
+  <p>And no — you do not need to speak with a foreign accent to teach internationally. You do not need to pretend to be somebody you are not. You do not need perfection before you begin.</p>
+
+  <div class="pull-quote">
+    <p>What students need most is not perfection. It is clarity. Warmth. Patience. Encouragement. Presence.</p>
+  </div>
+
+  <hr class="divider">
+
+  <h2 class="section-heading">This course is not selling fantasy.</h2>
+
+  <p>Not everybody becomes rich overnight. Not everybody earns thousands immediately. This is not magic. It is skill-building. Confidence-building. Consistency-building.</p>
+
+  <p>Some people will use this as side income. Some people will build full careers from it. Some people will use it to survive difficult seasons. Some will use it to fund bigger dreams.</p>
+
+  <p class="bold-line">But almost everybody who succeeds starts the same way: they stop underestimating what they already know.</p>
+
+  <div class="reflection-section">
+    <h2>Pause and reflect.</h2>
+    <p class="sub">Before you continue, sit with these questions. Write honestly. There are no right answers.</p>
+
+    <div class="question">
+      <div class="q-num">Question 01</div>
+      <p>What beliefs did you grow up hearing about teachers?</p>
+      <p class="hint">Write honestly. No pressure. No right answer.</p>
+    </div>
+
+    <div class="question">
+      <div class="q-num">Question 02</div>
+      <p>Have you ever helped someone understand something before?</p>
+      <p class="hint">Describe the moment. How did it feel?</p>
+    </div>
+
+    <div class="question">
+      <div class="q-num">Question 03</div>
+      <p>What is one thing people naturally come to you for help with?</p>
+    </div>
+
+    <div class="question">
+      <div class="q-num">Question 04</div>
+      <p>What would change in your life if you truly believed your knowledge had value?</p>
+    </div>
+  </div>
+
+</div>
+
+<div class="nav-footer">
+  <a href="#" class="prev">← Back to Lesson 1</a>
+  <button class="next-btn">Continue to Lesson 3 →</button>
+</div>
+
+<div class="mascot" title="Your guide">🦎</div>
+
+<script>
+  window.addEventListener('scroll', () => {
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const scrollHeight = doc.scrollHeight - doc.clientHeight;
+    const progress = (scrollTop / scrollHeight) * 100;
+    document.getElementById('progress').style.width = progress + '%';
+  });
+</script>
+
+</body>
+</html>
