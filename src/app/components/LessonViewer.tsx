@@ -1,5 +1,14 @@
 import { Video, Headphones, Play, FileText, CheckCircle, BookOpen } from 'lucide-react';
+import { useRef, useEffect } from 'react';
 import type { Lesson } from '../App';
+
+// Save/restore native video playback position per lesson ID
+function getSavedTime(lessonId: string): number {
+  return parseFloat(localStorage.getItem(`tbi_vpos_${lessonId}`) || '0');
+}
+function saveTime(lessonId: string, time: number) {
+  localStorage.setItem(`tbi_vpos_${lessonId}`, String(Math.floor(time)));
+}
 import { NigerianTeacherLesson } from './NigerianTeacherLesson';
 import { Module2Interactive } from './Module2Interactive';
 import { EngagementScenarios } from './EngagementScenarios';
@@ -14,6 +23,7 @@ import { ManagingMeMindLesson } from './ManagingMeMindLesson';
 import { Module2Quiz } from './Module2Quiz';
 import { Module3Quiz } from './Module3Quiz';
 import { Module4Quiz } from './Module4Quiz';
+import { LessonPlanningGuide } from './LessonPlanningGuide';
 import { Module6Quiz } from './Module6Quiz';
 import { logo } from '../assets';
 
@@ -25,6 +35,19 @@ interface LessonViewerProps {
 }
 
 export function LessonViewer({ lesson, onComplete, onCorrectAnswer, onWrongAnswer }: LessonViewerProps) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Restore saved playback position when lesson changes, save on time update
+  useEffect(() => {
+    const el = videoRef.current;
+    if (!el || !lesson) return;
+    const saved = getSavedTime(lesson.id);
+    if (saved > 0) el.currentTime = saved;
+    const onTimeUpdate = () => saveTime(lesson.id, el.currentTime);
+    el.addEventListener('timeupdate', onTimeUpdate);
+    return () => el.removeEventListener('timeupdate', onTimeUpdate);
+  }, [lesson?.id]);
+
   if (!lesson) {
     return (
       <div className="h-full flex items-center justify-center px-4">
@@ -80,6 +103,7 @@ export function LessonViewer({ lesson, onComplete, onCorrectAnswer, onWrongAnswe
     '0-1', // NigerianTeacherLesson
     '1-1', // EngagementScenarios
     '1-2', // ClassroomManagement
+    '1-6', // LessonPlanningGuide
     '1-7', // Module2Quiz
     '2-1', // AIToolsLesson
     '2-2', // AIEthicsLesson
@@ -240,6 +264,8 @@ export function LessonViewer({ lesson, onComplete, onCorrectAnswer, onWrongAnswe
           <PortfolioLesson onComplete={() => onComplete(lesson.id)} />
         ) : lesson.id === '1-2' ? (
           <ClassroomManagement onComplete={() => onComplete(lesson.id)} />
+        ) : lesson.id === '1-6' ? (
+          <LessonPlanningGuide onComplete={() => onComplete(lesson.id)} />
         ) : lesson.id === '1-7' ? (
           <Module2Quiz
             onComplete={() => onComplete(lesson.id)}
@@ -282,14 +308,25 @@ export function LessonViewer({ lesson, onComplete, onCorrectAnswer, onWrongAnswe
             <div className="space-y-6">
               {lesson.videoUrl ? (
                 <div className="bg-black rounded-xl overflow-hidden shadow-2xl aspect-video">
-                  <iframe
-                    className="w-full h-full"
-                    src={lesson.videoUrl.replace('youtu.be/', 'www.youtube.com/embed/').replace('watch?v=', 'embed/')}
-                    title={lesson.title}
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
+                  {lesson.videoUrl.includes('youtube.com') || lesson.videoUrl.includes('youtu.be') || lesson.videoUrl.includes('vimeo.com') ? (
+                    <iframe
+                      className="w-full h-full"
+                      src={lesson.videoUrl.replace('youtu.be/', 'www.youtube.com/embed/').replace('watch?v=', 'embed/')}
+                      title={lesson.title}
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  ) : (
+                    <video
+                      ref={videoRef}
+                      className="w-full h-full"
+                      src={lesson.videoUrl}
+                      controls
+                      controlsList="nodownload"
+                      playsInline
+                    />
+                  )}
                 </div>
               ) : (
                 // VIDEO PLACEHOLDER — no videoUrl set for this lesson yet.

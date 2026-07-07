@@ -139,7 +139,7 @@ export function ModuleSidebar({ modules, selectedLesson, onLessonSelect, isOpen,
                                 <CheckCircle size={12} className="text-[#84CC16] flex-shrink-0" />
                               )}
                             </div>
-                            <div className="text-[10px] text-white/50 mt-0.5">{lesson.duration}</div>
+                            {lesson.duration && <div className="text-[10px] text-white/50 mt-0.5">{lesson.duration}</div>}
                           </div>
                         </button>
                       );

@@ -23,7 +23,7 @@ const scenarios: Scenario[] = [
   {
     id: 1,
     title: 'The Quiet Student',
-    image: '/src/imports/scenario1.png',
+    image: 'https://images.unsplash.com/photo-1558424843-0eb88cbdde27?fm=jpg&q=80&w=1200&auto=format&fit=crop',
     situation: 'Wei is 8 years old and has been in your online class for three weeks. He understands the material but rarely speaks up. When you ask him a question directly, he freezes and looks down.',
     question: 'How do you encourage Wei to participate more actively?',
     choices: [
@@ -53,7 +53,7 @@ const scenarios: Scenario[] = [
   {
     id: 2,
     title: 'Technical Difficulties',
-    image: '/src/imports/scenario2.png',
+    image: 'https://images.unsplash.com/photo-1595259307444-a6d6308e3d59?fm=jpg&q=80&w=1200&auto=format&fit=crop',
     situation: 'You\'re 10 minutes into a lesson with Mei, an adult professional preparing for a work presentation. Her video freezes, then disconnects. She rejoins 3 minutes later, visibly frustrated and apologetic.',
     question: 'What\'s the best way to handle this disruption and keep the lesson on track?',
     choices: [
@@ -83,7 +83,7 @@ const scenarios: Scenario[] = [
   {
     id: 3,
     title: 'The Confident Beginner',
-    image: '/src/imports/scenario3.png',
+    image: 'https://images.unsplash.com/photo-1628645419925-ca8262621ed1?fm=jpg&q=80&w=1200&auto=format&fit=crop',
     situation: 'Amara is a new teacher, energetic and well-prepared for her first online ESL class with a 10-year-old student. She has a professional setup with a ring light and has practiced her lesson plan multiple times.',
     question: 'What should Amara prioritize in her first few classes to build a strong foundation?',
     choices: [
@@ -113,7 +113,7 @@ const scenarios: Scenario[] = [
   {
     id: 4,
     title: 'The Distracted Child',
-    image: '/src/imports/scenario4__1_.png',
+    image: 'https://images.unsplash.com/photo-1716440258786-a965ba03781f?fm=jpg&q=80&w=1200&auto=format&fit=crop',
     situation: 'Hana is 7 years old and halfway through the lesson, she starts looking away from the screen. Her attention drifts to something off-camera. She\'s no longer responding to your questions.',
     question: 'How do you regain Hana\'s attention without frustrating her or losing lesson momentum?',
     choices: [
@@ -143,7 +143,7 @@ const scenarios: Scenario[] = [
   {
     id: 5,
     title: 'The Hovering Parent',
-    image: '/src/imports/scenario5__1_.png',
+    image: 'https://images.unsplash.com/photo-1758687126499-9ff30d1c5762?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200',
     situation: 'During your lesson with 9-year-old Tunde, his mother sits next to him, frequently correcting him, answering questions for him, and interjecting with her own questions. Tunde looks uncomfortable and stops trying.',
     question: 'How do you handle parental interference while maintaining professionalism and protecting the learning environment?',
     choices: [
@@ -173,7 +173,7 @@ const scenarios: Scenario[] = [
   {
     id: 6,
     title: 'Teacher Burnout',
-    image: '/src/imports/scenario6.png',
+    image: 'https://images.unsplash.com/photo-1620809975674-10b8ff5f8e58?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1200',
     situation: 'You\'ve taught 6 classes today back-to-back. You\'re exhausted. Your next student logs in—an adult learner who booked a conversation class and expects you to be energetic and engaged.',
     question: 'How do you deliver a quality lesson when you\'re running on empty?',
     choices: [
